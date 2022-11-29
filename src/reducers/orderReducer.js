@@ -60,7 +60,7 @@ export const orderDetailReducer = (
     case ORDER_DETAIL_SUCCESS:
       return {
         loading: false,
-        order: action.payload,
+        order: action.payload.order,
       }
     case ORDER_DETAIL_FAIL:
       return {

@@ -35,10 +35,15 @@ const OrderScreen = ({ match }) => {
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2)
     }
-    order.itemsPrice = addDecimals(
-      order.orderItems.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
+    order.itemsPrice = Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(
+      addDecimals(
+        order.orderItems.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        )
       )
     )
   }
@@ -78,6 +83,12 @@ const OrderScreen = ({ match }) => {
   // const successPaymentHandler = (paymentResult) => {
   //   dispatch(payOrder(orderId, paymentResult))
   // }
+  const formatVNDC = (price) => {
+    return Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price)
+  }
   const confirmHandler = (orderId) => {
     dispatch(confirmOrderById(orderId))
   }
@@ -163,8 +174,8 @@ const OrderScreen = ({ match }) => {
                         <Link to={`/product/${item.product}`}>{item.name}</Link>
                       </Col>
                       <Col md={4}>
-                        {item.quantity} x {item.price} =
-                        {item.quantity * item.price}
+                        {item.quantity} x {formatVNDC(item.price)} =
+                        {formatVNDC(item.quantity * item.price)}
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -234,25 +245,25 @@ const OrderScreen = ({ match }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${order.itemsPrice}</Col>
+                  <Col>{order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
+                  <Col>{formatVNDC(order.shippingPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
+                  <Col>{formatVNDC(order.taxPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
+                  <Col>{formatVNDC(order.totalPrice)}</Col>
                 </Row>
               </ListGroup.Item>
             </ListGroup>

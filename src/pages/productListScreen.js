@@ -69,7 +69,12 @@ const ProductListScreen = ({ history, match }) => {
   const createProductHandler = () => {
     dispatch(createProduct())
   }
-
+  const formatVNDC = (price) => {
+    return Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price)
+  }
   return (
     <>
       <Row className='align-items-center'>
@@ -108,7 +113,7 @@ const ProductListScreen = ({ history, match }) => {
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
-                  <td>${product.price}</td>
+                  <td>{formatVNDC(product.price)}</td>
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>

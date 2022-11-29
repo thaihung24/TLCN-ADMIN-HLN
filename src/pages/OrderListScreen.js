@@ -27,10 +27,22 @@ const OrderListScreen = ({ history, match }) => {
   const orderStatus = {
     Shipping: 'primary',
     Shipped: 'success',
+    shipping: 'primary',
+    shipped: 'success',
     pending: 'warning',
+    Pending: 'warning',
     paid: 'success',
     refund: 'danger',
     cancel: 'danger',
+    Paid: 'success',
+    Refund: 'danger',
+    Cancel: 'danger',
+  }
+  const formatVNDC = (price) => {
+    return Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price)
   }
   return (
     <>
@@ -60,7 +72,7 @@ const OrderListScreen = ({ history, match }) => {
                   <td>{order._id}</td>
                   <td>{order.user && order.user.name}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>${order.totalPrice}</td>
+                  <td>{formatVNDC(order.totalPrice)}</td>
                   <td>
                     {order.isPaid ? (
                       order.paidAt.substring(0, 10)

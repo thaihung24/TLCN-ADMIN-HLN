@@ -144,8 +144,13 @@ const orderStatus = {
     "shipping": "primary",
     "pending": "warning",
     "paid": "success",
-    "refund": "danger"
-}
+    "refund": "danger",
+    "Shipping": "primary",
+    "Pending": "warning",
+    "Paid": "success",
+    "Refund": "danger",
+    shipped: 'success',    
+    Shipped: 'success',}
 
 const renderOrderHead = (item, index) => (
     <th key={index}>{item}</th>
