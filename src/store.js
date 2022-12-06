@@ -8,7 +8,10 @@ import {
   userDetailReducer,
   userUpdateProfileReducer,
   userListReducer,
+  userTrashListReducer,
   userDeleteReducer,
+  userRestoreReducer,
+  userForceReducer,
   userUpdateReducer,
 } from './reducers/userReducers'
 import {
@@ -16,6 +19,9 @@ import {
   productListReducer,
   productDeleteReducer,
   productCreateReducer,
+  productRestoreReducer,
+  productTrashListReducer,
+  productForceReducer,
 } from './reducers/productReducers'
 import {
   orderListReducer,
@@ -34,15 +40,20 @@ const reducer = combineReducers({
   productListReducer: productListReducer,
   productDelete: productDeleteReducer,
   productCreate: productCreateReducer,
+  productRestore: productRestoreReducer,
+  productTrashList: productTrashListReducer,
+  productForce: productForceReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
-  userDetail: userDetailReducer,
+  userDetails: userDetailReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userList: userListReducer,
+  userTrashList: userTrashListReducer,
   userDelete: userDeleteReducer,
+  userForce: userForceReducer,
+  userRestore: userRestoreReducer,
   userUpdate: userUpdateReducer,
   countProduct: countProductReducers,
-
   cardsReducer: cardsReducer,
   topOrder: topOrderReducer,
   lastOrder: lastOrderReducer,

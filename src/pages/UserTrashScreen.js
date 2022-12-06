@@ -1,36 +1,65 @@
 import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Table, Button, Nav, Row, Col } from 'react-bootstrap'
+import { Table, Button, Row, Col, Nav } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/message/Message'
 import Loader from '../components/loader/Loader'
-import Paginate from '../components/Paginates/PaginateUser'
-import { getListUsers, deleteUser } from '../actions/userActions'
-const UserListScreen = ({ history, match }) => {
+import Paginate from '../components/Paginates/PaginateTrashUser'
+import {
+  getTrashListUsers,
+  forceUser,
+  restoreUser,
+} from '../actions/userActions'
+const UserTrashScreen = ({ history, match }) => {
   const pageNumber = match.params.pageNumber || 1
   const dispatch = useDispatch()
-  const userList = useSelector((state) => state.userList)
-  const { loading, error, users, page, pages } = userList
+  const userTrashList = useSelector((state) => state.userTrashList)
+  const { loading, error, users, page, pages } = userTrashList
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
-  const userDelete = useSelector((state) => state.userDelete)
-  const { success: successDelete } = userDelete
+  const userRestore = useSelector((state) => state.userRestore)
+  const { success: successRestore } = userRestore
+  const userForce = useSelector((state) => state.userForce)
+  const { success: successForce } = userForce
   useEffect(() => {
     if (userInfo && userInfo.data.user.isAdmin) {
-      dispatch(getListUsers(pageNumber))
+      dispatch(getTrashListUsers(pageNumber))
     } else {
       history.push('/login')
     }
-  }, [dispatch, history, successDelete, userInfo])
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure you want to delete')) {
-      dispatch(deleteUser(id))
+  }, [dispatch, history, userInfo, successRestore, successForce])
+  const restoreHandler = (id) => {
+    if (window.confirm('Are you sure you want to restore')) {
+      dispatch(restoreUser(id))
     }
   }
+  const forceHandler = (id) => {
+    if (window.confirm('Are you sure you want to delete')) {
+      dispatch(forceUser(id))
+    }
+  }
+  // {
+  //   users && users.users.map((user) => console.log(user))
+  // }
 
   return (
     <>
-      <h1> Users</h1>
+      <Row className='align-items-center'>
+        <Col className='text-left'>
+          <LinkContainer className='my-3' to='/customers'>
+            <Nav.Link>
+              <Button>
+                <i class='fa-solid fa-arrow-left'></i> Quay lại
+              </Button>
+            </Nav.Link>
+          </LinkContainer>
+        </Col>
+      </Row>
+      <Row className='align-items-center'>
+        <Col className='col-8'>
+          <i className='fas fa-trash'></i>Thùng rác
+        </Col>
+      </Row>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -69,15 +98,17 @@ const UserListScreen = ({ history, match }) => {
                       )}
                     </td>
                     <td>
-                      <LinkContainer to={`/user/${user._id}/edit`}>
-                        <Button variant='light' className='btn-sm'>
-                          <i className='fas fa-edit'></i>
-                        </Button>
-                      </LinkContainer>
+                      <Button
+                        variant='light'
+                        className='btn-sm'
+                        onClick={() => restoreHandler(user._id)}
+                      >
+                        <i class='fa-solid fa-rotate-left'></i>
+                      </Button>
                       <Button
                         variant='danger'
                         className='btn-sm'
-                        onClick={() => deleteHandler(user._id)}
+                        onClick={() => forceHandler(user._id)}
                       >
                         <i className='fas fa-trash'></i>
                       </Button>
@@ -87,21 +118,10 @@ const UserListScreen = ({ history, match }) => {
             </tbody>
           </Table>
           <Paginate pages={pages} page={page} isAdmin={true} />
-          <Row className='align-items-center'>
-            <Col className='text-left'>
-              <LinkContainer className='my-3' to='/customersTrash'>
-                <Nav.Link>
-                  <Button>
-                    <i className='fas fa-trash'></i> Thùng Rác
-                  </Button>
-                </Nav.Link>
-              </LinkContainer>
-            </Col>
-          </Row>
         </>
       )}
     </>
   )
 }
 
-export default UserListScreen
+export default UserTrashScreen
