@@ -2,6 +2,9 @@ import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
   PRODUCT_LIST_FAIL,
+  PRODUCT_TRASH_LIST_REQUEST,
+  PRODUCT_TRASH_LIST_SUCCESS,
+  PRODUCT_TRASH_LIST_FAIL,
   PRODUCT_COUNT_REQUEST,
   PRODUCT_COUNT_SUCCESS,
   PRODUCT_COUNT_FAIL,
@@ -11,6 +14,12 @@ import {
   PRODUCT_DELETE_REQUEST,
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DELETE_FAIL,
+  PRODUCT_RESTORE_REQUEST,
+  PRODUCT_RESTORE_SUCCESS,
+  PRODUCT_RESTORE_FAIL,
+  PRODUCT_FORCE_REQUEST,
+  PRODUCT_FORCE_SUCCESS,
+  PRODUCT_FORCE_FAIL,
   PRODUCT_CREATE_RESET,
   PRODUCT_CREATE_FAIL,
   PRODUCT_CREATE_SUCCESS,
@@ -44,7 +53,23 @@ export const productListReducer = (state = { products: [] }, action) => {
       return state
   }
 }
-
+export const productTrashListReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case PRODUCT_TRASH_LIST_REQUEST:
+      return { loading: true, products: [] }
+    case PRODUCT_TRASH_LIST_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload.products,
+        pages: action.payload.pages,
+        page: action.payload.page,
+      }
+    case PRODUCT_TRASH_LIST_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
 export const productDetailReducer = (
   state = { product: { reviews: [] } },
   action
@@ -70,6 +95,30 @@ export const productDeleteReducer = (state = {}, action) => {
     case PRODUCT_DELETE_SUCCESS:
       return { loading: false, success: true }
     case PRODUCT_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+export const productRestoreReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PRODUCT_RESTORE_REQUEST:
+      return { loading: true }
+    case PRODUCT_RESTORE_SUCCESS:
+      return { loading: false, success: true }
+    case PRODUCT_RESTORE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+export const productForceReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PRODUCT_FORCE_REQUEST:
+      return { loading: true }
+    case PRODUCT_FORCE_SUCCESS:
+      return { loading: false, success: true }
+    case PRODUCT_FORCE_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

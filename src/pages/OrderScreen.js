@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Button, Row, Col, ListGroup, Image, Card, Nav } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,7 +17,6 @@ import StatusSteps from '../components/StatusSteps'
 const OrderScreen = ({ match }) => {
   const dispatch = useDispatch()
   const orderId = match.params.id
-  const [sdkReady, setSdkReady] = useState(false)
   const orderDetail = useSelector((state) => state.orderDetail)
   const { order, loading, error } = orderDetail
   const confirmOrder = useSelector((state) => state.confirmOrder)
@@ -110,6 +108,10 @@ const OrderScreen = ({ match }) => {
     <Loader />
   ) : error ? (
     <Message variant='danger'>{error}</Message>
+  ) : loadingConfirm ? (
+    <Loader />
+  ) : errorConfirm ? (
+    <Message variant='danger'>{errorConfirm}</Message>
   ) : (
     <>
       <h1> Order {order._id}</h1>

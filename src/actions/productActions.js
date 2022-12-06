@@ -3,6 +3,9 @@ import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
   PRODUCT_LIST_FAIL,
+  PRODUCT_TRASH_LIST_REQUEST,
+  PRODUCT_TRASH_LIST_SUCCESS,
+  PRODUCT_TRASH_LIST_FAIL,
   PRODUCT_COUNT_REQUEST,
   PRODUCT_COUNT_SUCCESS,
   PRODUCT_COUNT_FAIL,
@@ -15,6 +18,12 @@ import {
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DELETE_REQUEST,
   PRODUCT_DELETE_FAIL,
+  PRODUCT_RESTORE_SUCCESS,
+  PRODUCT_RESTORE_REQUEST,
+  PRODUCT_RESTORE_FAIL,
+  PRODUCT_FORCE_SUCCESS,
+  PRODUCT_FORCE_REQUEST,
+  PRODUCT_FORCE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
   PRODUCT_UPDATE_FAIL,
@@ -49,6 +58,27 @@ export const listProducts =
       })
     }
   }
+export const trashListProducts =
+  (keyword = '', pageNumber = '') =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_TRASH_LIST_REQUEST })
+
+      const { data } = await axios.get(`/api/products/trash?page=${pageNumber}`)
+      dispatch({
+        type: PRODUCT_TRASH_LIST_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_TRASH_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
+  }
 export const productDetail = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAIL_REQUEST })
@@ -66,6 +96,42 @@ export const productDetail = (id) => async (dispatch) => {
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
+    })
+  }
+}
+export const createProduct = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_CREATE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.post(`/api/products`, {}, config)
+
+    dispatch({
+      type: PRODUCT_CREATE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: PRODUCT_CREATE_FAIL,
+      payload: message,
     })
   }
 }
@@ -104,11 +170,10 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
     })
   }
 }
-
-export const createProduct = () => async (dispatch, getState) => {
+export const restoreProduct = (id) => async (dispatch, getState) => {
   try {
     dispatch({
-      type: PRODUCT_CREATE_REQUEST,
+      type: PRODUCT_RESTORE_REQUEST,
     })
 
     const {
@@ -121,11 +186,10 @@ export const createProduct = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.post(`/api/products`, {}, config)
+    await axios.patch(`/api/products/${id}/restore`, config)
 
     dispatch({
-      type: PRODUCT_CREATE_SUCCESS,
-      payload: data,
+      type: PRODUCT_RESTORE_SUCCESS,
     })
   } catch (error) {
     const message =
@@ -136,12 +200,46 @@ export const createProduct = () => async (dispatch, getState) => {
       dispatch(logout())
     }
     dispatch({
-      type: PRODUCT_CREATE_FAIL,
+      type: PRODUCT_RESTORE_FAIL,
       payload: message,
     })
   }
 }
+export const forceProduct = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_FORCE_REQUEST,
+    })
 
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.patch(`/api/products/${id}/force`, config)
+
+    dispatch({
+      type: PRODUCT_FORCE_SUCCESS,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: PRODUCT_FORCE_FAIL,
+      payload: message,
+    })
+  }
+}
 export const updateProduct = (product) => async (dispatch, getState) => {
   try {
     dispatch({

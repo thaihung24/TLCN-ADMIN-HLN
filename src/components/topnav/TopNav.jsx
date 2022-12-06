@@ -4,24 +4,21 @@ import './topnav.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import {  Nav } from 'react-bootstrap'
 import Dropdown from '../dropdown/Dropdown'
-import Message from "../message/Message"
-import Loader from "../loader/Loader"
+
 import ThemeMenu from '../thememenu/ThemeMenu'
 
 import notifications from '../../assets/JsonData/notification.json'
 
-import user_image from '../../assets/images/tuat.png'
-
 import user_menu from '../../assets/JsonData/user_menus.json'
 import { logout } from '../../actions/userActions'
-const curr_user = {
-    fullName: 'User',
-    avatar:{
-        url: "https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg"
-    }
-}
+// const curr_user = {
+//     fullName: 'User',
+//     avatar:{
+//         url: "https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg"
+//     }
+// }
 
 const renderNotificationItem = (item, index) => (
     <div className="notification-item" key={index}>

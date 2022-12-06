@@ -12,8 +12,6 @@ import Table from '../components/table/Table'
 
 import Badge from '../components/badge/Badge'
 
-import statusCards from '../assets/JsonData/status-card-data.json'
-
 import { getCards,getLastOrders,getTopOrders } from '../actions/dashboardActions'
 const chartOptions = {
     series: [{
@@ -21,7 +19,7 @@ const chartOptions = {
         data: [40,70,20,90,36,80,30,91,60]
     }, {
         name: 'Store Customers',
-        data: [40, 30, 70, 80, 40, 16, 40, 20, 51, 10]
+        data: [40, 30, 70, 80, 40, 16, 40, 20, 51]
     }],
     options: {
         color: ['#6ab04c', '#2980b9'],

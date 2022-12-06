@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Table, Button, Row, Col } from 'react-bootstrap'
+import { Table, Button, Row, Col, Nav } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/message/Message'
 import Loader from '../components/loader/Loader'
 import Paginate from '../components/Paginates/PaginateProduct'
+import Rating from '../components/Rating'
 import {
   listProducts,
   deleteProduct,
@@ -78,10 +79,10 @@ const ProductListScreen = ({ history, match }) => {
   return (
     <>
       <Row className='align-items-center'>
-        <Col>
+        <Col className='col-8'>
           <h1>Products</h1>
         </Col>
-        <Col className='text-right'>
+        <Col className='text-right col-4 '>
           <Button className='my-3' onClick={createProductHandler}>
             <i className='fas fa-plus'></i> Create Product
           </Button>
@@ -103,7 +104,7 @@ const ProductListScreen = ({ history, match }) => {
                 <th>ID</th>
                 <th>NAME</th>
                 <th>PRICE</th>
-                <th>CATEGORY</th>
+                <th>RATING</th>
                 <th>BRAND</th>
                 <th></th>
               </tr>
@@ -114,7 +115,9 @@ const ProductListScreen = ({ history, match }) => {
                   <td>{product._id}</td>
                   <td>{product.name}</td>
                   <td>{formatVNDC(product.price)}</td>
-                  <td>{product.category}</td>
+                  <td>
+                    <Rating value={product.rating} />
+                  </td>
                   <td>{product.brand}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product._id}/edit`}>
@@ -135,6 +138,17 @@ const ProductListScreen = ({ history, match }) => {
             </tbody>
           </Table>
           <Paginate pages={pages} page={page} isAdmin={true} />
+          <Row className='align-items-center'>
+            <Col className='text-left'>
+              <LinkContainer className='my-3' to='/productsTrash'>
+                <Nav.Link>
+                  <Button>
+                    <i className='fas fa-trash'></i> Thùng Rác
+                  </Button>
+                </Nav.Link>
+              </LinkContainer>
+            </Col>
+          </Row>
         </>
       )}
     </>
