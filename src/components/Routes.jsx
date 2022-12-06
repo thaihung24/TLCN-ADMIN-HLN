@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { Container } from 'react-bootstrap'
 import Dashboard from '../pages/Dashboard'
@@ -10,6 +11,7 @@ import ProductTrashScreen from '../pages/ProductTrashScreen'
 import UserEditScreen from "../pages/UserEditScreen"
 import UserTrashScreen from '../pages/UserTrashScreen'
 import AnalyticsScreen from '../pages/AnalyticsScreen'
+import AddProductScreen from "../pages/AddProductScreen";
 import {  Route ,Switch} from 'react-router-dom'
 const Routes = () => {
     return (
@@ -62,4 +64,5 @@ const Routes = () => {
     )
 }
 
-export default Routes
+
+export default Routes;
