@@ -32,9 +32,17 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
   PRODUCT_CREATE_REVIEW_RESET,
+  GET_REVIEWS_REQUEST,
+  GET_REVIEWS_SUCCESS,
+  GET_REVIEWS_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_SUCCESS,
+  DELETE_REVIEW_RESET,
+  DELETE_REVIEW_FAIL,
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
+  CLEAR_ERRORS,
 } from '../constants/productConstant'
 export const productListReducer = (state = { products: [] }, action) => {
   switch (action.type) {
@@ -71,7 +79,7 @@ export const productTrashListReducer = (state = { products: [] }, action) => {
   }
 }
 export const productDetailReducer = (
-  state = { product: { reviews: [] } },
+  state = { product: [], reviews: [] },
   action
 ) => {
   switch (action.type) {
@@ -81,9 +89,15 @@ export const productDetailReducer = (
       return {
         loading: false,
         product: action.payload,
+        reviews: action.payload.reviews,
       }
     case PRODUCT_DETAIL_FAIL:
       return { loading: false, error: action.payload }
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
     default:
       return state
   }
@@ -164,6 +178,64 @@ export const productReviewCreateReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case PRODUCT_CREATE_REVIEW_RESET:
       return {}
+    default:
+      return state
+  }
+}
+export const productReviewsReducer = (state = { review: [] }, action) => {
+  switch (action.type) {
+    case GET_REVIEWS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+    case GET_REVIEWS_SUCCESS:
+      return {
+        loading: false,
+        reviews: action.payload,
+      }
+    case GET_REVIEWS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      }
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
+    default:
+      return state
+  }
+}
+export const productReviewDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_REVIEW_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      }
+    case DELETE_REVIEW_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload,
+      }
+    case DELETE_REVIEW_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      }
+    case DELETE_REVIEW_RESET:
+      return {
+        ...state,
+        isDeleted: false,
+      }
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      }
     default:
       return state
   }

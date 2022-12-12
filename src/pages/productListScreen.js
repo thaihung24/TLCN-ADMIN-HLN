@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
+
 import { LinkContainer } from 'react-router-bootstrap'
-import { Table, Button, Row, Col, Nav } from 'react-bootstrap'
+import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/message/Message'
 import Loader from '../components/loader/Loader'
@@ -66,10 +67,6 @@ const ProductListScreen = ({ history, match }) => {
       dispatch(deleteProduct(id))
     }
   }
-
-  const createProductHandler = () => {
-    dispatch(createProduct())
-  }
   const formatVNDC = (price) => {
     return Intl.NumberFormat('it-IT', {
       style: 'currency',
@@ -83,9 +80,11 @@ const ProductListScreen = ({ history, match }) => {
           <h1>Products</h1>
         </Col>
         <Col className='text-right col-4 '>
-          <Button className='my-3' onClick={createProductHandler}>
-            <i className='fas fa-plus'></i> Create Product
-          </Button>
+          <LinkContainer to='/addproduct' className='my-3'>
+            <Button>
+              <i className='fas fa-plus'></i> Create Product
+            </Button>
+          </LinkContainer>
         </Col>
       </Row>
       {loadingDelete && <Loader />}
@@ -116,7 +115,11 @@ const ProductListScreen = ({ history, match }) => {
                   <td>{product.name}</td>
                   <td>{formatVNDC(product.price)}</td>
                   <td>
-                    <Rating value={product.rating} />
+                    <Rating
+                      value={product.rating}
+                      text={`${product.numReviews} review`}
+                      color="'#f8e825'"
+                    />
                   </td>
                   <td>{product.brand}</td>
                   <td>
@@ -141,11 +144,9 @@ const ProductListScreen = ({ history, match }) => {
           <Row className='align-items-center'>
             <Col className='text-left'>
               <LinkContainer className='my-3' to='/productsTrash'>
-                <Nav.Link>
-                  <Button>
-                    <i className='fas fa-trash'></i> Thùng Rác
-                  </Button>
-                </Nav.Link>
+                <Button>
+                  <i className='fas fa-trash'></i> Thùng Rác
+                </Button>
               </LinkContainer>
             </Col>
           </Row>

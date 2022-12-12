@@ -30,6 +30,13 @@ import {
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
+  GET_REVIEWS_REQUEST,
+  GET_REVIEWS_SUCCESS,
+  GET_REVIEWS_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_SUCCESS,
+  DELETE_REVIEW_FAIL,
+  CLEAR_ERRORS,
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
@@ -240,48 +247,49 @@ export const forceProduct = (id) => async (dispatch, getState) => {
     })
   }
 }
-export const updateProduct = (product) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: PRODUCT_UPDATE_REQUEST,
-    })
+export const updateProduct =
+  (productId, formData) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PRODUCT_UPDATE_REQUEST,
+      })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.put(
+        `/api/products/${productId}`,
+        formData,
+        config
+      )
+
+      dispatch({
+        type: PRODUCT_UPDATE_SUCCESS,
+        payload: data,
+      })
+      dispatch({ type: PRODUCT_DETAIL_SUCCESS, payload: data })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout())
+      }
+      dispatch({
+        type: PRODUCT_UPDATE_FAIL,
+        payload: message,
+      })
     }
-
-    const { data } = await axios.put(
-      `/api/products/${product._id}`,
-      product,
-      config
-    )
-
-    dispatch({
-      type: PRODUCT_UPDATE_SUCCESS,
-      payload: data,
-    })
-    dispatch({ type: PRODUCT_DETAIL_SUCCESS, payload: data })
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
-    }
-    dispatch({
-      type: PRODUCT_UPDATE_FAIL,
-      payload: message,
-    })
   }
-}
 
 export const createProductReview =
   (productId, review) => async (dispatch, getState) => {
@@ -320,7 +328,58 @@ export const createProductReview =
       })
     }
   }
+export const getProductReviews = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_REVIEWS_REQUEST })
+    const { data } = await axios.get(`/api/products/${id}`)
+    dispatch({
+      type: GET_REVIEWS_SUCCESS,
+      payload: data.reviews,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_REVIEWS_FAIL,
+      payload: error.response.data.message,
+    })
+  }
+}
+// Delete product review
+export const deleteReview =
+  (reviewId, productId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: DELETE_REVIEW_REQUEST })
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+      const { data } = await axios.delete(
+        `/api/products/${productId}/reviews?reviewId=${reviewId}`,
+        config
+      )
+      dispatch({
+        type: DELETE_REVIEW_SUCCESS,
+        payload: data.success,
+      })
+    } catch (error) {
+      dispatch({
+        type: DELETE_REVIEW_FAIL,
+        payload: error.response.data.message,
+      })
+    }
+  }
+
+// Clear Errors
+export const clearErrors = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_ERRORS,
+  })
+}
 export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
@@ -370,3 +429,4 @@ export const countProducts = () => async (dispatch, getState) => {
     })
   }
 }
+// Clear Errors

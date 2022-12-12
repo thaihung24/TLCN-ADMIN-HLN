@@ -12,6 +12,7 @@ import UserEditScreen from "../pages/UserEditScreen"
 import UserTrashScreen from '../pages/UserTrashScreen'
 import AnalyticsScreen from '../pages/AnalyticsScreen'
 import AddProductScreen from "../pages/AddProductScreen";
+import ProductEditScreen from '../pages/ProductEditScreen'
 import {  Route ,Switch} from 'react-router-dom'
 const Routes = () => {
     return (
@@ -31,12 +32,14 @@ const Routes = () => {
             exact
           />
           <Route path='/user/:id/edit' component={UserEditScreen} />
+          <Route path='/admin/product/:id/edit' component={ProductEditScreen} exact />
           <Route path='/productsTrash' component={ProductTrashScreen} exact/>
           <Route
             path='/productsTrash/:pageNumber'
             component={ProductTrashScreen}
             exact
           />
+           <Route path='/addproduct' component={AddProductScreen} exact/>
           <Route path='/products' component={ProductListScreen} exact/>
           <Route
             path='/products/:pageNumber'

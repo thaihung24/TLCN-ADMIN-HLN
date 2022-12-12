@@ -17,11 +17,15 @@ import {
 import {
   countProductReducers,
   productListReducer,
+  productDetailReducer,
+  productUpdateReducer,
   productDeleteReducer,
   productCreateReducer,
   productRestoreReducer,
   productTrashListReducer,
   productForceReducer,
+  productReviewDeleteReducer,
+  productReviewsReducer,
 } from './reducers/productReducers'
 import {
   orderListReducer,
@@ -38,11 +42,15 @@ import {
 const reducer = combineReducers({
   ThemeReducer: ThemeReducer,
   productListReducer: productListReducer,
+  productUpdate: productUpdateReducer,
+  productDetail: productDetailReducer,
   productDelete: productDeleteReducer,
   productCreate: productCreateReducer,
   productRestore: productRestoreReducer,
   productTrashList: productTrashListReducer,
   productForce: productForceReducer,
+  productReviewDelete: productReviewDeleteReducer,
+  productReviews: productReviewsReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailReducer,
