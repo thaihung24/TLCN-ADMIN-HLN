@@ -11,7 +11,7 @@ import ProductTrashScreen from '../pages/ProductTrashScreen'
 import UserEditScreen from "../pages/UserEditScreen"
 import UserTrashScreen from '../pages/UserTrashScreen'
 import AnalyticsScreen from '../pages/AnalyticsScreen'
-import AddProductScreen from "../pages/AddProductScreen";
+import AddProductScreens from "../pages/AddProductScreens"
 import ProductEditScreen from '../pages/ProductEditScreen'
 import {  Route ,Switch} from 'react-router-dom'
 const Routes = () => {
@@ -39,7 +39,7 @@ const Routes = () => {
             component={ProductTrashScreen}
             exact
           />
-           <Route path='/addproduct' component={AddProductScreen} exact/>
+           <Route path='/addproduct' component={AddProductScreens} exact/>
           <Route path='/products' component={ProductListScreen} exact/>
           <Route
             path='/products/:pageNumber'

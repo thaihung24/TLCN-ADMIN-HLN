@@ -89,6 +89,11 @@ const OrderScreen = ({ match }) => {
   }
   const confirmHandler = (orderId) => {
     dispatch(confirmOrderById(orderId))
+    const status = {
+      statusNow: 'Confirm',
+      description: 'Đơn hàng Đã được xác nhận. ',
+    }
+    dispatch(updateStatusOrder(orderId, status))
   }
   const shippingHandler = () => {
     const status = {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { MDBDataTable } from 'mdbreact'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Row, Col, ListGroup, Button, Form, Alert } from 'react-bootstrap'
+import { Row, Col, ListGroup, Button, Form, Alert, Card } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Message from '../components/message/Message'
 import Loader from '../components/loader/Loader'
@@ -203,7 +203,7 @@ const ProductEditScreen = ({ history, match }) => {
   return (
     <>
       <LinkContainer className='my-3' to='/products'>
-        <Button className='btn' variant='cyan'>
+        <Button className='btn rounded' variant='cyan'>
           Go Back
         </Button>
       </LinkContainer>
@@ -230,23 +230,35 @@ const ProductEditScreen = ({ history, match }) => {
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Row>
+                  <Row className='align-items-center'>
                     {product.productOptions &&
                       product.productOptions.map((option, index) => (
-                        <Col
-                          key={index}
-                          className={
-                            optionIndex === index
-                              ? 'list-group-item active rounded'
-                              : 'list-group-item-action'
-                          }
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => toggleOptionHandler(index)}
-                        >
-                          <i className='fas '>{option.productOptionName}</i>
-                        </Col>
+                        <>
+                          <Col
+                            key={index}
+                            className={
+                              optionIndex === index
+                                ? 'list-group-item active rounded'
+                                : 'list-group-item-action'
+                            }
+                            style={{
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => toggleOptionHandler(index)}
+                          >
+                            <b>{option.productOptionName}</b>
+                          </Col>
+                          {/* {optionIndex === index ? (
+                            <Col>
+                              <i
+                                className='fa-solid fa-plus list-group-item-action'
+                                style={{
+                                  cursor: 'pointer',
+                                }}
+                              ></i>
+                            </Col>
+                          ) : null} */}
+                        </>
                       ))}
                   </Row>
                 </ListGroup.Item>
@@ -276,7 +288,7 @@ const ProductEditScreen = ({ history, match }) => {
                 <ListGroup.Item>
                   <Row>
                     <Col md={4}>
-                      <label htmlFor='stock_field'>Stock</label>
+                      <b htmlFor='stock_field'>Stock</b>
                     </Col>
                     <Col>
                       <input
@@ -289,7 +301,7 @@ const ProductEditScreen = ({ history, match }) => {
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  Price :{' '}
+                  <b>Price : </b>
                   <input
                     type='text'
                     className='form-control count d-inline'
@@ -411,7 +423,7 @@ const ProductEditScreen = ({ history, match }) => {
             <ListGroup>
               <Col md={12}>
                 <ListGroup.Item className='d-grid'>
-                  <Button type='submit' variant='cyan' className='btn'>
+                  <Button type='submit' variant='cyan' className='btn rounded'>
                     UPDATE
                   </Button>
                 </ListGroup.Item>

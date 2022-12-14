@@ -81,7 +81,7 @@ const ProductListScreen = ({ history, match }) => {
         </Col>
         <Col className='text-right col-4 '>
           <LinkContainer to='/addproduct' className='my-3'>
-            <Button>
+            <Button className='rounded' variant='cyan'>
               <i className='fas fa-plus'></i> Create Product
             </Button>
           </LinkContainer>
@@ -111,17 +111,17 @@ const ProductListScreen = ({ history, match }) => {
             <tbody>
               {products.map((product) => (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>{formatVNDC(product.price)}</td>
-                  <td>
+                  <td className='text'>{product._id}</td>
+                  <td className='text'>{product.name}</td>
+                  <td className='text'>{formatVNDC(product.price)}</td>
+                  <td className='text'>
                     <Rating
                       value={product.rating}
                       text={`${product.numReviews} review`}
                       color="'#f8e825'"
                     />
                   </td>
-                  <td>{product.brand}</td>
+                  <td className='text'>{product.brand}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product._id}/edit`}>
                       <Button variant='light' className='btn-sm'>
