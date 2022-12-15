@@ -1,14 +1,11 @@
 import React from 'react'
-
 import './topnav.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import {  Nav } from 'react-bootstrap'
 import Dropdown from '../dropdown/Dropdown'
-
 import ThemeMenu from '../thememenu/ThemeMenu'
-
 import notifications from '../../assets/JsonData/notification.json'
 
 import user_menu from '../../assets/JsonData/user_menus.json'
@@ -54,7 +51,7 @@ const Topnav = () => {
     const { userInfo } = userLogin
     const logoutHandler = () => {
         dispatch(logout())
-      }
+    }
     return (
          <div className='topnav'>
            <div className="topnav__search">

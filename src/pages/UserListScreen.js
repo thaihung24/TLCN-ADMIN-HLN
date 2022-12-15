@@ -50,10 +50,16 @@ const UserListScreen = ({ history, match }) => {
               {users &&
                 users.map((user) => (
                   <tr key={user._id}>
-                    <td>{user._id}</td>
-                    <td>{user.name}</td>
                     <td>
-                      <a href={`mailto:${user.email}`}>{user.email}</a>
+                      <b>{user._id}</b>
+                    </td>
+                    <td>
+                      <b>{user.name}</b>
+                    </td>
+                    <td>
+                      <a href={`mailto:${user.email}`}>
+                        <b>{user.email}</b>
+                      </a>
                     </td>
                     <td>
                       {user.isAdmin ? (

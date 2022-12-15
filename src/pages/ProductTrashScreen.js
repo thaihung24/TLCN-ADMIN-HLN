@@ -29,18 +29,17 @@ const ProductTrashScreen = ({ history, match }) => {
     loading: loadingForce,
     error: errorForce,
     success: successForce,
-  } = useSelector((state) => state.productRestore)
+  } = useSelector((state) => state.productForce)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET })
-
-    if (!userInfo || !userInfo.data.user.isAdmin) {
+    if (userInfo && userInfo.data.user.isAdmin) {
+      dispatch(trashListProducts('', pageNumber))
+    } else {
       history.push('/login')
     }
-    dispatch(trashListProducts('', pageNumber))
   }, [dispatch, history, userInfo, successRestore, pageNumber, successForce])
 
   const restoreHandler = (id) => {
@@ -67,7 +66,7 @@ const ProductTrashScreen = ({ history, match }) => {
           <LinkContainer className='my-3' to='/products'>
             <Nav.Link>
               <Button>
-                <i class='fa-solid fa-arrow-left'></i> Quay lại
+                <i className='fa-solid fa-arrow-left'></i> Quay lại
               </Button>
             </Nav.Link>
           </LinkContainer>
@@ -108,21 +107,20 @@ const ProductTrashScreen = ({ history, match }) => {
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                      <Button
-                        variant='light'
-                        className='btn-sm'
-                        onClick={() => restoreHandler(product._id)}
-                      >
-                        <i class='fa-solid fa-rotate-left'></i>
-                      </Button>
-                    </LinkContainer>
+                    <Button
+                      variant='light'
+                      className='btn-sm'
+                      onClick={() => restoreHandler(product._id)}
+                    >
+                      <i className='fa-solid fa-rotate-left'></i>
+                    </Button>
+
                     <Button
                       variant='danger'
                       className='btn-sm'
                       onClick={() => forceHandler(product._id)}
                     >
-                      <i class='fas fa-trash'></i>
+                      <i className='fas fa-trash'></i>
                     </Button>
                   </td>
                 </tr>

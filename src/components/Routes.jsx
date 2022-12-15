@@ -28,7 +28,7 @@ const Routes = () => {
           <Route path='/customers' component={UserListScreen} exact/>
           <Route
             path='/customers/:pageNumber'
-            component={ProductListScreen}
+            component={UserListScreen}
             exact
           />
           <Route path='/user/:id/edit' component={UserEditScreen} />

@@ -106,7 +106,7 @@ export const productDetail = (id) => async (dispatch) => {
     })
   }
 }
-export const createProduct = () => async (dispatch, getState) => {
+export const createProduct = (formData) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_CREATE_REQUEST,
@@ -122,8 +122,7 @@ export const createProduct = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.post(`/api/products`, {}, config)
-
+    const { data } = await axios.post(`/api/products`, formData, config)
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
       payload: data,

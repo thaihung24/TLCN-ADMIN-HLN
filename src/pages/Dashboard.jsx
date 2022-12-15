@@ -85,9 +85,9 @@ const renderCusomerHead = (item, index) => (
 
 const renderCusomerBody = (item, index) => (
     <tr key={index}>
-        <td>{item._id[0].name}</td>
-        <td>{item.countOrder}</td>
-        <td>{item.sumTotalPrice}</td>
+        <td><b>{item._id[0].name}</b></td>
+        <td><b>{item.countOrder}</b></td>
+        <td><b>{item.sumTotalPrice}</b></td>
     </tr>
 )
 
@@ -156,10 +156,10 @@ const renderOrderHead = (item, index) => (
 
 const renderOrderBody = (item, index) => (
     <tr key={index}>
-        <td>{index}</td>
-        <td>{item.user[0].name}</td>
-        <td>{item.totalPrice}</td>
-        <td>{item.createdAt}</td>
+        <td><b>{index}</b></td>
+        <td><b>{item.user[0].name}</b></td>
+        <td><b>{item.totalPrice}</b></td>
+        <td><b>{item.createdAt}</b></td>
         <td>
             <Badge  type={orderStatus[item.status.statusNow]} content={item.status.statusNow}/>
         </td>

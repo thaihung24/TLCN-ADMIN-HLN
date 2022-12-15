@@ -1,3 +1,4 @@
+import axios from 'axios'
 import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -34,7 +35,7 @@ import {
   USER_FORCE_FAIL,
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
-import axios from 'axios'
+import { OPTION_ADD_ITEM_RESET } from '../constants/optionsConstants.js'
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -68,9 +69,8 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo')
   dispatch({ type: USER_LOGOUT })
-  dispatch({ type: USER_DETAIL_RESET })
-  dispatch({ type: ORDER_LIST_MY_RESET })
-  dispatch({ type: USER_LIST_RESET })
+  localStorage.removeItem('optionItems')
+  dispatch({ type: OPTION_ADD_ITEM_RESET })
 }
 export const register = (name, email, password) => async (dispatch) => {
   try {

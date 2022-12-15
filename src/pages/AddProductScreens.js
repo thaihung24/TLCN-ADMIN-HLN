@@ -2,15 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import {
-  Row,
-  Col,
-  ListGroup,
-  Button,
-  Form,
-  Alert,
-  Stack,
-} from 'react-bootstrap'
+import { Row, Col, ListGroup, Button, Form } from 'react-bootstrap'
 
 import Message from '../components/message/Message'
 import Loader from '../components/loader/Loader'
@@ -20,10 +12,12 @@ import { getCategories } from '../actions/categoryActions'
 import { getManufactures } from '../actions/manufacturerActions'
 import { getSubByIdCategories } from '../actions/subCategoryActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstant'
+import { OPTION_ADD_ITEM_RESET } from '../constants/optionsConstants'
 import { addToOption } from '../actions/optionActions'
+import { createProduct } from '../actions/productActions'
 import { color } from '@mui/system'
 
-const AddProductScreens = ({ history, match }) => {
+const AddProductScreens = ({ history, match, location }) => {
   const [optionIndex, setOptionIndex] = useState(0)
   const [toggleOption, setToggleOption] = useState(false)
   const [option, setOption] = useState('')
@@ -41,11 +35,10 @@ const AddProductScreens = ({ history, match }) => {
   const [images, setImages] = useState([])
   const [imagesPreview, setImagesPreview] = useState([])
   const [categoryId, setCategoryId] = useState('')
-  const [manufacture, setManufacture] = useState('')
+  const [manufactureId, setManufactureId] = useState('')
   const [subCategoryId, setSubCategoryId] = useState('')
   const { optionItems } = useSelector((state) => state.option)
   const {
-    productCreate,
     loading: loadingCreate,
     error: errorCreate,
     success,
@@ -63,6 +56,7 @@ const AddProductScreens = ({ history, match }) => {
     loading: loadingSub,
     error: errorSub,
   } = useSelector((state) => state.subCategoryList)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -73,6 +67,11 @@ const AddProductScreens = ({ history, match }) => {
     if (categories.length === 0) {
       dispatch(getCategories())
     }
+    if (success) {
+      dispatch({ type: PRODUCT_CREATE_RESET })
+      dispatch({ type: OPTION_ADD_ITEM_RESET })
+      history.push('/products')
+    }
     if (manufacturers.length === 0) {
       dispatch(getManufactures())
     }
@@ -80,13 +79,14 @@ const AddProductScreens = ({ history, match }) => {
   const toggleOptionHandler = (index) => {
     setOptionIndex(index)
     setColorIndex(0)
-    setStock(
-      optionItems[index].colors[0] ? optionItems[index].colors[0].quantity : 1
-    )
+    if (optionItems[index] && optionItems[index].colors.length > 0) {
+      setStock(optionItems[index].colors[0].quantity)
+      setImagesPreview(optionItems[index].colors[0].images)
+    } else {
+      setStock(1)
+      setImagesPreview([])
+    }
     setPrice(optionItems[index] ? optionItems[index].price : 1)
-    setImagesPreview(
-      optionItems[index].colors[0] ? optionItems[index].colors[0].images : []
-    )
   }
   const toggleColorHandler = (index) => {
     setColorIndex(index)
@@ -139,12 +139,13 @@ const AddProductScreens = ({ history, match }) => {
     dispatch(addToOption(optionItems))
     setToggleOption(false)
   }
-  const deleteOptionHandler = () => {
+  const deleteOptionHandler = (index) => {
     if (optionItems.length === 1) {
       setToggleColor(false)
       setColor('')
     }
-    dispatch(addToOption(optionItems.splice(optionIndex, 1)))
+    optionItems.splice(index, 1)
+    dispatch(addToOption(optionItems))
   }
   const colorClickHandler = () => {
     optionItems[optionIndex].colors.push({
@@ -156,7 +157,19 @@ const AddProductScreens = ({ history, match }) => {
     setToggleColor(false)
   }
   const deleteColorHandler = () => {
-    dispatch(addToOption(optionItems[optionIndex].colors.splice(colorIndex, 1)))
+    optionItems[optionIndex].colors.splice(colorIndex, 1)
+
+    dispatch(addToOption(optionItems))
+  }
+  const submitHandler = (e) => {
+    e.preventDefault()
+    const formData = new Object()
+    formData.name = name
+    formData.manufacturer = manufactureId
+    formData.subCategory = subCategoryId
+    formData.description = description
+    formData.productOptions = optionItems
+    dispatch(createProduct(formData))
   }
   return (
     <>
@@ -173,9 +186,13 @@ const AddProductScreens = ({ history, match }) => {
         <Loader />
       ) : errorManufacturer ? (
         <Message variant='danger'>{errorManufacturer}</Message>
+      ) : loadingCreate ? (
+        <Loader />
+      ) : errorCreate ? (
+        <Message variant='danger'>{errorCreate}</Message>
       ) : (
         <>
-          <Form>
+          <Form onSubmit={submitHandler}>
             <ListGroup>
               <Row className='align-items-center'>
                 <Col>
@@ -184,7 +201,7 @@ const AddProductScreens = ({ history, match }) => {
                       className='form-select'
                       aria-label='Default select example'
                       required
-                      onChange={(e) => setManufacture(e.target.value)}
+                      onChange={(e) => setManufactureId(e.target.value)}
                     >
                       <option>menu Manufacturer</option>
                       {manufacturers &&
@@ -299,7 +316,7 @@ const AddProductScreens = ({ history, match }) => {
                     <Row className='align-items-center'>
                       {optionItems &&
                         optionItems.map((option, index) => (
-                          <Stack key={index}>
+                          <>
                             <Col
                               className={
                                 optionIndex === index
@@ -319,12 +336,12 @@ const AddProductScreens = ({ history, match }) => {
                                 style={{
                                   cursor: 'pointer',
                                 }}
-                                onClick={() => deleteOptionHandler()}
+                                onClick={() => deleteOptionHandler(optionIndex)}
                               >
                                 <i className='fa-solid fa-xmark '></i>
                               </Col>
                             ) : null}
-                          </Stack>
+                          </>
                         ))}
                       <Col md={2}>
                         <i
@@ -367,7 +384,7 @@ const AddProductScreens = ({ history, match }) => {
                     <Row className='align-items-center'>
                       {optionItems[optionIndex] &&
                         optionItems[optionIndex].colors.map((color, index) => (
-                          <Stack key={index}>
+                          <>
                             <Col
                               className={
                                 colorIndex === index
@@ -392,7 +409,7 @@ const AddProductScreens = ({ history, match }) => {
                                 <i className='fa-solid fa-xmark '></i>
                               </Col>
                             ) : null}
-                          </Stack>
+                          </>
                         ))}
                       {optionItems.length > 0 ? (
                         <Col md={2}>
@@ -511,6 +528,21 @@ const AddProductScreens = ({ history, match }) => {
                 </Col>
               </ListGroup>
             )}
+            <Row>
+              <ListGroup>
+                <Col md={12}>
+                  <ListGroup.Item className='d-grid'>
+                    <Button
+                      type='submit'
+                      variant='cyan'
+                      className='btn rounded'
+                    >
+                      Add Product
+                    </Button>
+                  </ListGroup.Item>
+                </Col>
+              </ListGroup>
+            </Row>
           </Form>
         </>
       )}
