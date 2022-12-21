@@ -84,7 +84,7 @@ export const register = (name, email, password) => async (dispatch) => {
       },
     }
     const { data } = await axios.post(
-      `${URL}/api/users`,
+      `${URL}/users`,
       { name, email, password },
       config
     )
@@ -119,7 +119,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
     const { data } = await axios.get(`${URL}/users/${id}`, config)
@@ -150,7 +150,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
     const { data } = await axios.put(`${URL}/users/profile`, user, config)
@@ -182,7 +182,7 @@ export const getListUsers =
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${userInfo.data.access_token}`,
         },
       }
       const { data } = await axios.get(
@@ -205,11 +205,23 @@ export const getListUsers =
   }
 export const getTrashListUsers =
   (pageNumber = '') =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     try {
       dispatch({ type: USER_TRASH_LIST_REQUEST })
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-      const { data } = await axios.get(`${URL}/users/trash?page=${pageNumber}`)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.data.access_token}`,
+        },
+      }
+      const { data } = await axios.get(
+        `${URL}/users/trash?page=${pageNumber}`,
+        config
+      )
       dispatch({
         type: USER_TRASH_LIST_SUCCESS,
         payload: data,
@@ -236,7 +248,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
     await axios.delete(`${URL}/users/${id}`, config)
@@ -258,14 +270,14 @@ export const restoreUser = (id) => async (dispatch, getState) => {
     dispatch({
       type: USER_RESTORE_REQUEST,
     })
-
     const {
       userLogin: { userInfo },
     } = getState()
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
 
@@ -300,11 +312,12 @@ export const forceUser = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
 
-    await axios.patch(`${URL}/users/${id}/force`, config)
+    await axios.delete(`${URL}/users/${id}/force`, config)
 
     dispatch({
       type: USER_FORCE_SUCCESS,
@@ -336,7 +349,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
 

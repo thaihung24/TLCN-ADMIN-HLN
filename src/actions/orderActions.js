@@ -34,7 +34,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
     const { data } = await axios.post(`${URL}/orders`, order, config)
@@ -64,7 +64,8 @@ export const getOrderDetail = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
     const { data } = await axios.get(`${URL}/orders/${id}`, config)
@@ -96,7 +97,7 @@ export const payOrder =
       const config = {
         headers: {
           'content-type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${userInfo.data.access_token}`,
         },
       }
       const { data } = await axios.put(
@@ -129,7 +130,8 @@ export const listMyOrders = () => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
     const { data } = await axios.get(`${URL}/orders/myorders`, config)
@@ -154,14 +156,14 @@ export const listOrders =
       dispatch({
         type: ORDER_LIST_REQUEST,
       })
-
       const {
         userLogin: { userInfo },
       } = getState()
 
       const config = {
         headers: {
-          Authorization: `Bearer ${userInfo.token}`,
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.data.access_token}`,
         },
       }
 
@@ -238,6 +240,7 @@ export const updateStatusOrder = (id, status) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }

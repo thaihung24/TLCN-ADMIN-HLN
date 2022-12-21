@@ -42,7 +42,6 @@ import {
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
 } from '../constants/productConstant'
-import { baseURL } from '../apis/axios'
 import { logout } from './userActions'
 export const listProducts =
   (keyword = '', pageNumber = '') =>
@@ -69,12 +68,22 @@ export const listProducts =
   }
 export const trashListProducts =
   (keyword = '', pageNumber = '') =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     try {
       dispatch({ type: PRODUCT_TRASH_LIST_REQUEST })
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.data.access_token}`,
+        },
+      }
       const { data } = await axios.get(
-        `${URL}/products/trash?page=${pageNumber}`
+        `${URL}/products/trash?page=${pageNumber}`,
+        config
       )
       dispatch({
         type: PRODUCT_TRASH_LIST_SUCCESS,
@@ -122,7 +131,8 @@ export const createProduct = (formData) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
 
@@ -157,7 +167,8 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
 
@@ -185,14 +196,14 @@ export const restoreProduct = (id) => async (dispatch, getState) => {
     dispatch({
       type: PRODUCT_RESTORE_REQUEST,
     })
-
     const {
       userLogin: { userInfo },
     } = getState()
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
 
@@ -227,11 +238,12 @@ export const forceProduct = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
 
-    await axios.patch(`${URL}/products/${id}/force`, config)
+    await axios.delete(`${URL}/products/${id}/force`, config)
 
     dispatch({
       type: PRODUCT_FORCE_SUCCESS,
@@ -264,7 +276,7 @@ export const updateProduct =
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${userInfo.data.access_token}`,
         },
       }
 
@@ -308,7 +320,7 @@ export const createProductReview =
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${userInfo.data.access_token}`,
         },
       }
 
@@ -358,7 +370,7 @@ export const deleteReview =
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${userInfo.data.access_token}`,
         },
       }
       const { data } = await axios.delete(
