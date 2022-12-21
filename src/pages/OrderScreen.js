@@ -162,7 +162,9 @@ const OrderScreen = ({ match }) => {
             {order.isPaid ? (
               <Message variant='success'> Paid on {order.paidAt}</Message>
             ) : (
-              <Message variant='danger'>Not Paid</Message>
+              <Message variant='danger'>
+                <b>Not Paid</b>
+              </Message>
             )}
           </ListGroup.Item>
           <ListGroup.Item>
@@ -178,11 +180,17 @@ const OrderScreen = ({ match }) => {
                         <Image src={item.image} alt={item.name} fluid rounded />
                       </Col>
                       <Col>
-                        <Link to={`/product/${item.product}`}>{item.name}</Link>
+                        <Link to={`/product/${item.product}`}>
+                          <b>{item.name}</b>
+                        </Link>
                       </Col>
                       <Col md={4}>
-                        {item.quantity} x {formatVNDC(item.price)} =
-                        {formatVNDC(item.quantity * item.price)}
+                        <Row>
+                          <b>
+                            {item.quantity} x {formatVNDC(item.price)} =
+                            {formatVNDC(item.quantity * item.price)}
+                          </b>
+                        </Row>
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -251,26 +259,42 @@ const OrderScreen = ({ match }) => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
-                  <Col>{order.itemsPrice}</Col>
+                  <Col>
+                    <b>Items</b>
+                  </Col>
+                  <Col>
+                    <b>{order.itemsPrice}</b>
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
-                  <Col>{formatVNDC(order.shippingPrice)}</Col>
+                  <Col>
+                    <b>Shipping</b>
+                  </Col>
+                  <Col>
+                    <b>{formatVNDC(order.shippingPrice)}</b>
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
-                  <Col>{formatVNDC(order.taxPrice)}</Col>
+                  <Col>
+                    <b>Tax</b>
+                  </Col>
+                  <Col>
+                    <b>{formatVNDC(order.taxPrice)}</b>
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
-                  <Col>{formatVNDC(order.totalPrice)}</Col>
+                  <Col>
+                    <b>Total</b>
+                  </Col>
+                  <Col>
+                    <b>{formatVNDC(order.totalPrice)}</b>
+                  </Col>
                 </Row>
               </ListGroup.Item>
             </ListGroup>
