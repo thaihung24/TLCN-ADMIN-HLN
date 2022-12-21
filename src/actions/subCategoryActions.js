@@ -4,12 +4,12 @@ import {
   SUB_CATEGORY_LIST_REQUEST,
   SUB_CATEGORY_LIST_SUCCESS,
 } from '../constants/subCategoryConstants'
-
+import { baseURL } from '../apis/axios'
 export const getSubByIdCategories = (categoryId) => async (dispatch) => {
   try {
     dispatch({ type: SUB_CATEGORY_LIST_REQUEST })
     const { data } = await axios.get(
-      `/api/subcategories?categoryId=${categoryId}`
+      `${baseURL.api}/subcategories?categoryId=${categoryId}`
     )
     dispatch({
       type: SUB_CATEGORY_LIST_SUCCESS,

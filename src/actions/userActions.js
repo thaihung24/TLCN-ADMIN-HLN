@@ -35,6 +35,7 @@ import {
   USER_FORCE_FAIL,
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
+import { baseURL } from '../apis/axios'
 import { OPTION_ADD_ITEM_RESET } from '../constants/optionsConstants.js'
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -47,7 +48,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     }
     const { data } = await axios.post(
-      '/api/auth/login',
+      `${baseURL.api}/auth/login`,
       { email, password },
       config
     )
@@ -83,7 +84,7 @@ export const register = (name, email, password) => async (dispatch) => {
       },
     }
     const { data } = await axios.post(
-      '/api/users',
+      `${baseURL.api}/api/users`,
       { name, email, password },
       config
     )
@@ -121,7 +122,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`/api/users/${id}`, config)
+    const { data } = await axios.get(`${baseURL.api}/users/${id}`, config)
     dispatch({
       type: USER_DETAIL_SUCCESS,
       payload: data,
@@ -152,7 +153,11 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.put(`/api/users/profile`, user, config)
+    const { data } = await axios.put(
+      `${baseURL.api}/users/profile`,
+      user,
+      config
+    )
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data,
@@ -184,7 +189,10 @@ export const getListUsers =
           Authorization: `Bearer ${userInfo.token}`,
         },
       }
-      const { data } = await axios.get(`/api/users?page=${pageNumber}`, config)
+      const { data } = await axios.get(
+        `${baseURL.api}/users?page=${pageNumber}`,
+        config
+      )
       dispatch({
         type: USER_LIST_SUCCESS,
         payload: data,
@@ -205,7 +213,9 @@ export const getTrashListUsers =
     try {
       dispatch({ type: USER_TRASH_LIST_REQUEST })
 
-      const { data } = await axios.get(`/api/users/trash?page=${pageNumber}`)
+      const { data } = await axios.get(
+        `${baseURL.api}/users/trash?page=${pageNumber}`
+      )
       dispatch({
         type: USER_TRASH_LIST_SUCCESS,
         payload: data,
@@ -235,7 +245,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.delete(`/api/users/${id}`, config)
+    await axios.delete(`${baseURL.api}/users/${id}`, config)
     dispatch({
       type: USER_DELETE_SUCCESS,
     })
@@ -265,7 +275,7 @@ export const restoreUser = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.patch(`/api/users/${id}/restore`, config)
+    await axios.patch(`${baseURL.api}/users/${id}/restore`, config)
 
     dispatch({
       type: USER_RESTORE_SUCCESS,
@@ -300,7 +310,7 @@ export const forceUser = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.patch(`/api/users/${id}/force`, config)
+    await axios.patch(`${baseURL.api}/users/${id}/force`, config)
 
     dispatch({
       type: USER_FORCE_SUCCESS,
@@ -336,7 +346,11 @@ export const updateUser = (user) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config)
+    const { data } = await axios.put(
+      `${baseURL.api}/users/${user._id}`,
+      user,
+      config
+    )
 
     dispatch({ type: USER_UPDATE_SUCCESS })
 

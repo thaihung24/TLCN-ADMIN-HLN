@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { baseURL } from '../apis/axios.js'
 import {
   GET_CARDS_REQUEST,
   GET_CARDS_SUCCESS,
@@ -15,7 +16,7 @@ export const getCards = () => async (dispatch) => {
     dispatch({
       type: GET_CARDS_REQUEST,
     })
-    const { data } = await axios.get(`/api/dashBoard`)
+    const { data } = await axios.get(`${baseURL.api}/dashBoard`)
     dispatch({
       type: GET_CARDS_SUCCESS,
       payload: data,
@@ -35,7 +36,7 @@ export const getTopOrders = () => async (dispatch) => {
     dispatch({
       type: GET_TOP_ORDER_REQUEST,
     })
-    const { data } = await axios.get(`/api/dashBoard/topOrders`)
+    const { data } = await axios.get(`${baseURL.api}/dashBoard/topOrders`)
     dispatch({
       type: GET_TOP_ORDER_SUCCESS,
       payload: data,
@@ -55,7 +56,7 @@ export const getLastOrders = () => async (dispatch) => {
     dispatch({
       type: GET_LAST_ORDER_REQUEST,
     })
-    const { data } = await axios.get(`/api/dashBoard/lastOrders`)
+    const { data } = await axios.get(`${baseURL.api}/dashBoard/lastOrders`)
     dispatch({
       type: GET_LAST_ORDER_SUCCESS,
       payload: data,
