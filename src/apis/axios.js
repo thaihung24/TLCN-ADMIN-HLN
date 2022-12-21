@@ -1,4 +1,1 @@
-const baseURL = {
-  api: 'https://tlcn-2022-be.onrender.com/api',
-}
-export { baseURL }
+export const URL = 'https://tlcn-2022-be.onrender.com/api'

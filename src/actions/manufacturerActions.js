@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { baseURL } from '../apis/axios'
+import { URL } from '../apis/axios'
 import {
   MANUFACTURER_LIST_REQUEST,
   MANUFACTURER_LIST_SUCCESS,
@@ -11,7 +11,7 @@ export const getManufactures = () => async (dispatch) => {
     dispatch({
       type: MANUFACTURER_LIST_REQUEST,
     })
-    const { data } = await axios.get(`${baseURL.api}/manufacturers`)
+    const { data } = await axios.get(`${URL}/manufacturers`)
     dispatch({
       type: MANUFACTURER_LIST_SUCCESS,
       payload: data,

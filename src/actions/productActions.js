@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { baseURL } from '../apis/axios'
+import { URL } from '../apis/axios'
 import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
@@ -51,7 +51,7 @@ export const listProducts =
       dispatch({ type: PRODUCT_LIST_REQUEST })
 
       const { data } = await axios.get(
-        `${baseURL.api}/products?keyword=${keyword}&page=${pageNumber}`
+        `${URL}/products?keyword=${keyword}&page=${pageNumber}`
       )
       dispatch({
         type: PRODUCT_LIST_SUCCESS,
@@ -74,7 +74,7 @@ export const trashListProducts =
       dispatch({ type: PRODUCT_TRASH_LIST_REQUEST })
 
       const { data } = await axios.get(
-        `${baseURL.api}/products/trash?page=${pageNumber}`
+        `${URL}/products/trash?page=${pageNumber}`
       )
       dispatch({
         type: PRODUCT_TRASH_LIST_SUCCESS,
@@ -94,7 +94,7 @@ export const productDetail = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAIL_REQUEST })
 
-    const { data } = await axios.get(`${baseURL.api}/products/${id}`)
+    const { data } = await axios.get(`${URL}/products/${id}`)
 
     dispatch({
       type: PRODUCT_DETAIL_SUCCESS,
@@ -126,11 +126,7 @@ export const createProduct = (formData) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.post(
-      `${baseURL.api}/products`,
-      formData,
-      config
-    )
+    const { data } = await axios.post(`${URL}/products`, formData, config)
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
       payload: data,
@@ -165,7 +161,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.delete(`${baseURL.api}/products/${id}`, config)
+    await axios.delete(`${URL}/products/${id}`, config)
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -200,7 +196,7 @@ export const restoreProduct = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.patch(`${baseURL.api}/products/${id}/restore`, config)
+    await axios.patch(`${URL}/products/${id}/restore`, config)
 
     dispatch({
       type: PRODUCT_RESTORE_SUCCESS,
@@ -235,7 +231,7 @@ export const forceProduct = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.patch(`${baseURL.api}/products/${id}/force`, config)
+    await axios.patch(`${URL}/products/${id}/force`, config)
 
     dispatch({
       type: PRODUCT_FORCE_SUCCESS,
@@ -273,7 +269,7 @@ export const updateProduct =
       }
 
       const { data } = await axios.put(
-        `${baseURL.api}/products/${productId}`,
+        `${URL}/products/${productId}`,
         formData,
         config
       )
@@ -316,11 +312,7 @@ export const createProductReview =
         },
       }
 
-      await axios.post(
-        `${baseURL.api}/products/${productId}/reviews`,
-        review,
-        config
-      )
+      await axios.post(`${URL}/products/${productId}/reviews`, review, config)
 
       dispatch({
         type: PRODUCT_CREATE_REVIEW_SUCCESS,
@@ -342,7 +334,7 @@ export const createProductReview =
 export const getProductReviews = (id) => async (dispatch) => {
   try {
     dispatch({ type: GET_REVIEWS_REQUEST })
-    const { data } = await axios.get(`${baseURL.api}/products/${id}`)
+    const { data } = await axios.get(`${URL}/products/${id}`)
     dispatch({
       type: GET_REVIEWS_SUCCESS,
       payload: data.reviews,
@@ -370,7 +362,7 @@ export const deleteReview =
         },
       }
       const { data } = await axios.delete(
-        `${baseURL.api}/products/${productId}/reviews?reviewId=${reviewId}`,
+        `${URL}/products/${productId}/reviews?reviewId=${reviewId}`,
         config
       )
       dispatch({
@@ -395,7 +387,7 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
-    const { data } = await axios.get(`${baseURL.api}/products/top`)
+    const { data } = await axios.get(`${URL}/products/top`)
 
     dispatch({
       type: PRODUCT_TOP_SUCCESS,
@@ -425,7 +417,7 @@ export const countProducts = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
-    const { data } = await axios.get(`${baseURL.api}/products/count`, config)
+    const { data } = await axios.get(`${URL}/products/count`, config)
     dispatch({
       type: PRODUCT_COUNT_SUCCESS,
       payload: data,

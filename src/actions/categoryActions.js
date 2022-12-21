@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { baseURL } from '../apis/axios'
+import { URL } from '../apis/axios'
 import {
   CATEGORY_LIST_REQUEST,
   CATEGORY_LIST_FAIL,
@@ -10,7 +10,7 @@ export const getCategories = () => async (dispatch) => {
     dispatch({
       type: CATEGORY_LIST_REQUEST,
     })
-    const { data } = await axios.get(`${baseURL.api}/categories`)
+    const { data } = await axios.get(`${URL}/categories`)
     dispatch({
       type: CATEGORY_LIST_SUCCESS,
       payload: data,

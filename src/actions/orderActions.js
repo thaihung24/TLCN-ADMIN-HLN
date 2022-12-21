@@ -21,7 +21,7 @@ import {
 } from '../constants/orderConstants'
 import { logout } from './userActions'
 import axios from 'axios'
-import { baseURL } from '../apis/axios'
+import { URL } from '../apis/axios'
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -37,7 +37,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.post(`${baseURL.api}/orders`, order, config)
+    const { data } = await axios.post(`${URL}/orders`, order, config)
     dispatch({
       type: ORDER_CREATE_SUCCESS,
       payload: data,
@@ -67,7 +67,7 @@ export const getOrderDetail = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${baseURL.api}/orders/${id}`, config)
+    const { data } = await axios.get(`${URL}/orders/${id}`, config)
     dispatch({
       type: ORDER_DETAIL_SUCCESS,
       payload: data,
@@ -100,7 +100,7 @@ export const payOrder =
         },
       }
       const { data } = await axios.put(
-        `${baseURL.api}/orders/${orderId}/pay`,
+        `${URL}/orders/${orderId}/pay`,
         paymentResult,
         config
       )
@@ -132,7 +132,7 @@ export const listMyOrders = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${baseURL.api}/orders/myorders`, config)
+    const { data } = await axios.get(`${URL}/orders/myorders`, config)
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,
       payload: data,
@@ -166,7 +166,7 @@ export const listOrders =
       }
 
       const { data } = await axios.get(
-        `${baseURL.api}/orders?page=${pageNumber}`,
+        `${URL}/orders?page=${pageNumber}`,
         config
       )
 
@@ -205,10 +205,7 @@ export const confirmOrderById = (id) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(
-      `${baseURL.api}/orders/confirm/${id}`,
-      config
-    )
+    const { data } = await axios.put(`${URL}/orders/confirm/${id}`, config)
 
     dispatch({
       type: ORDER_CONFIRM_SUCCESS,
@@ -245,11 +242,7 @@ export const updateStatusOrder = (id, status) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(
-      `${baseURL.api}/orders/${id}`,
-      { status },
-      config
-    )
+    const { data } = await axios.put(`${URL}/orders/${id}`, { status }, config)
 
     dispatch({
       type: ORDER_UPDATE_STATUS_SUCCESS,
