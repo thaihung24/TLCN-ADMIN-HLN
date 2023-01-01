@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import Message from "../components/message/Message";
@@ -61,10 +61,12 @@ const EventListScreen = ({ history, match }) => {
                   <td>{event.expireIn.substring(0, 10)}</td>
                   <td>
                     {new Date(event.expireIn) - Date.now() > 0 ? (
-                      `${Math.floor(new Date(
-                        new Date(event.expireIn) - Date.now()
-                      ).getTime() /
-                      (1000 * 60 * 60 * 24 ))}days`
+                      `${Math.floor(
+                        new Date(
+                          new Date(event.expireIn) - Date.now()
+                        ).getTime() /
+                          (1000 * 60 * 60 * 24)
+                      )}days`
                     ) : (
                       <i className="fas fa-times" style={{ color: "red" }}></i>
                     )}
@@ -81,6 +83,13 @@ const EventListScreen = ({ history, match }) => {
               ))}
             </tbody>
           </Table>
+          <Row className="justify-content-end">
+            <Col md={2}>
+              <LinkContainer to="/event/create">
+                <Button className="btn rounded btn-primary">Tạo mới</Button>
+              </LinkContainer>
+            </Col>
+          </Row>
         </>
       )}
     </>

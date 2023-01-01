@@ -11,6 +11,7 @@ import {
     EVENT_UPDATE_FAIL,
     EVENT_UPDATE_SUCCESS,
     EVENT_UPDATE_REQUEST,
+    EVENT_DELETE_REQUEST,
 } from "../constants/eventContants"
 
 import {
@@ -120,5 +121,45 @@ export const updateEvent = (event) => (dispatch, getState) => {
             Authorization: `Bearer ${userInfo.data.access_token}`,
         },
     }
-    axios.put(`${URL}/events/639b335ea3cfe34e4f1f8cb6`, event, config)
+    axios.put(`${URL}/events/${event._id}`, event, config).then(res => {
+        dispatch({
+            type: EVENT_UPDATE_SUCCESS,
+            payload: res.data.event
+        })
+    }).catch((error) => {
+        dispatch({
+            type: EVENT_UPDATE_FAIL,
+            payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message,
+        })
+    })
+}
+export const deleteEvent = ({
+    eventId
+}) => (dispatch, getState) => {
+    dispatch({
+        type: EVENT_DELETE_REQUEST
+    })
+    const {
+        userLogin: {
+            userInfo
+        }
+    } = getState()
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userInfo.data.access_token}`,
+        },
+    }
+    axios.delete(`${URL}/events/${eventId}`, config).then(res => {
+        dispatch({
+            type: EVENT_UPDATE_SUCCESS,
+        })
+    }).catch((error) => {
+        dispatch({
+            type: EVENT_UPDATE_FAIL,
+            payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message,
+        })
+    })
 }

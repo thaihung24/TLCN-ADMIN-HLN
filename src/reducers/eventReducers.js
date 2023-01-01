@@ -11,9 +11,16 @@ import {
     EVENT_UPDATE_FAIL,
     EVENT_UPDATE_SUCCESS,
     EVENT_UPDATE_REQUEST,
+    EVENT_DELETE_FAIL,
+    EVENT_DELETE_SUCCESS,
+    EVENT_DELETE_REQUEST,
 } from "../constants/eventContants"
 
-export const eventsGetReducer = (state = {}, action) => {
+export const eventsGetReducer = (state = {
+    loading: false,
+    success: false,
+    error: false,
+}, action) => {
     switch (action.type) {
         case EVENTS_GET_REQUEST:
             return {
@@ -35,7 +42,11 @@ export const eventsGetReducer = (state = {}, action) => {
             return state
     }
 }
-export const eventCreateReducer = (state = {}, action) => {
+export const eventCreateReducer = (state = {
+    loading: false,
+    success: false,
+    error: false,
+}, action) => {
     switch (action.type) {
         case EVENT_CREATE_REQUEST:
             return {
@@ -57,7 +68,11 @@ export const eventCreateReducer = (state = {}, action) => {
     }
 }
 
-export const eventGetReducer = (state = {}, action) => {
+export const eventGetReducer = (state = {
+    loading: false,
+    success: false,
+    error: false,
+}, action) => {
     switch (action.type) {
         case EVENT_GET_REQUEST:
             return {
@@ -78,7 +93,11 @@ export const eventGetReducer = (state = {}, action) => {
             return state
     }
 }
-export const eventUpdateReducer = (state = {}, action) => {
+export const eventUpdateReducer = (state = {
+    loading: false,
+    success: false,
+    error: false,
+}, action) => {
     switch (action.type) {
         case EVENT_UPDATE_REQUEST:
             return {
@@ -91,6 +110,30 @@ export const eventUpdateReducer = (state = {}, action) => {
                 event: action.payload,
             }
         case EVENT_UPDATE_FAIL:
+            return {
+                loading: false,
+                error: action.payload,
+            }
+        default:
+            return state
+    }
+}
+export const eventDeleteReducer = (state = {
+    loading: false,
+    success: false,
+    error: false,
+}, action) => {
+    switch (action.type) {
+        case EVENT_DELETE_REQUEST:
+            return {
+                loading: true,
+            }
+        case EVENT_DELETE_SUCCESS:
+            return {
+                loading: false,
+                success: true,
+            }
+        case EVENT_DELETE_FAIL:
             return {
                 loading: false,
                 error: action.payload,

@@ -49,7 +49,9 @@ import {
 import {
     eventCreateReducer,
     eventGetReducer,
-    eventsGetReducer
+    eventsGetReducer,
+    eventUpdateReducer,
+    eventDeleteReducer
 } from './reducers/eventReducers'
 // 
 import {
@@ -101,7 +103,9 @@ const reducer = combineReducers({
     updateStatusOrder: updateStatusOrderReducer,
     createEvent: eventCreateReducer,
     eventList: eventsGetReducer,
-    eventDetail: eventGetReducer
+    eventDetail: eventGetReducer,
+    eventUpdate: eventUpdateReducer,
+    eventDelete: eventDeleteReducer,
 })
 const optionItemsFromStorage = localStorage.getItem('optionItems') ?
     JSON.parse(localStorage.getItem('optionItems')) : []

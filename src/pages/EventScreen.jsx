@@ -3,78 +3,298 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../components/loader/Loader";
 import Message from "../components/message/Message";
-import { getEvent, updateEvent } from "../actions/eventAction";
-import { Col, Form, Row } from "react-bootstrap";
+import { createEvent, getEvent, updateEvent } from "../actions/eventAction";
+import {
+  Button,
+  Col,
+  Form,
+  FormGroup,
+  ListGroup,
+  ListGroupItem,
+  Row,
+} from "react-bootstrap";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-const EventScreen = ({ match }) => {
+import { LinkContainer } from "react-router-bootstrap";
+const EventScreen = ({ match, history }) => {
+  const [eventData, setEventData] = useState({
+    products: [],
+    name: "",
+    expireIn: "",
+    color: "",
+    award: "",
+  });
+  const [editButton, setEditButton] = useState("PUT");
+  const [dateType, setDateType] = useState("date");
+  const [dateAdd, setDateAdd] = useState(0);
   const dispatch = useDispatch();
   const fileElement = useRef(null);
   const { loading, success, error, event } = useSelector(
     (state) => state.eventDetail
   );
+  const {
+    loading: loadingCreate,
+    success: successCreate,
+    error: errorCreate,
+    event: eventCreate,
+  } = useSelector((state) => state.createEvent);
+  const {
+    loading: loadingDelete,
+    success: successDelete,
+    error: errorDelete,
+    event: eventDelete,
+  } = useSelector((state) => state.eventDelete);
+  const {
+    loading: loadingUpdate,
+    success: successUpdate,
+    error: errorUpdate,
+    event: eventUpdate,
+  } = useSelector((state) => state.eventUpdate);
   // banner url
   const [bannerUrl, setBannerUrl] = useState("");
   useMemo(() => {
     const eventId = match.params.id;
-    if (!event && eventId) {
+    if (eventId !== "create" && eventId) {
+      setEditButton("PUT");
       dispatch(getEvent(eventId));
+    } else if (eventId === "create") {
+      setEditButton("POST");
+      setEventData({
+        products: [],
+        name: "",
+        expireIn: "",
+        color: "#000000",
+        award: "",
+      });
     }
   }, [match.params.id]);
   useEffect(() => {
-    setBannerUrl(event?.banner?.url);
+    if (event && match.params.id !== "create") {
+      setBannerUrl(event?.banner?.url);
+      setEventData({
+        products: event?.product,
+        name: event?.name,
+        expireIn: new Date(event?.expireIn),
+        color: event?.color,
+        award: event?.award,
+      });
+    }
   }, [event]);
+  useEffect(() => {
+    const successState = successDelete || successCreate || successUpdate;
+    console.log(successCreate);
+    // if (successState) history.push("/events");
+  }, [successCreate]);
   // Handler
+  // BANNER IMAGE CHANGE
   const bannerChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    console.log(fileElement);
-    console.log(fileElement.target);
     reader.onloadend = function (event) {
       setBannerUrl(event.target.result);
     };
     reader.readAsDataURL(file);
   };
+  // DATE CHANGE
+  const dateChange = (e) => {
+    const value = e.target.value;
+    const validDate = new Date(value).getTime() - Date.now();
+    if (validDate <= 0) {
+      alert("Ngày không hợp lệ");
+    } else {
+      const days = Math.round(validDate / (1000 * 60 * 60 * 24));
+      setDateAdd(days);
+      setEventData({
+        ...eventData,
+        expireIn: e.target.value,
+      });
+    }
+  };
+  // SUBMIT CALL
   const submitUpdateEvent = () => {
     const formData = new FormData();
 
     formData.append("image", fileElement.current.files[0]);
-    const data = new Object();
-    data = {
-      ...data,
-      products: newProducts || data.product,
-      name: newName || data.name, 
-      addAvailableDays: addAvailableDays + event.expireIn || data.expireIn,
-      color: newColor || data.color,
-      award: newAward || data.award,
-    };
-
-    formData.append("data", JSON.stringify(data));
-    dispatch(updateEvent(formData))
+    // catch add date
+    let data = eventData;
+    console.log(dateAdd);
+    if (editButton === "PUT") {
+      // [PUT]
+      data = {
+        ...data,
+        addAvailableDays: dateAdd,
+      };
+      formData.append("data", JSON.stringify(data));
+      dispatch(updateEvent(formData));
+    } else if (editButton === "POST") {
+      // [POST]
+      data = {
+        ...data,
+        availableDays: dateAdd,
+      };
+      formData.append("data", JSON.stringify(data));
+      dispatch(createEvent(formData));
+    }
+    //
   };
-  return loading ? (
-    <Loader />
-  ) : error ? (
-    <Message variant="danger">{error}</Message>
-  ) : (
-    <Form onSubmit={submitUpdateEvent}>
-      {/* BANNER */}
-      <Row>
-        <Col md={12}>
-          <LazyLoadImage
-            alt="loading"
-            height="auto"
-            width="100%"
-            src={bannerUrl}
-          />
-        </Col>
-      </Row>
-      {/* INPUT IMAGE */}
-      <Row>
-        <input type="file" ref={fileElement} onChange={bannerChange} />
-      </Row>
-      {/* INFO */}
-      <Row></Row>
-    </Form>
+  return (
+    <>
+      <LinkContainer className="my-3" to="/events">
+        <Button className="btn rounded" variant="cyan">
+          Go Back
+        </Button>
+      </LinkContainer>
+      {loading || loadingCreate || loadingDelete || loadingUpdate ? (
+        <Loader />
+      ) : error || errorCreate || errorDelete || errorUpdate ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <Form>
+          {/* BANNER */}
+          <Row>
+            <Col
+              md={12}
+              style={{
+                display: "flex",
+                height: "8em",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
+            >
+              <LazyLoadImage
+                alt="loading"
+                style={{
+                  objectFit: "contain",
+                  objectPosition: "center",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                }}
+                src={
+                  bannerUrl ||
+                  "https://cdn.pixabay.com/photo/2017/11/10/05/24/add-2935429_960_720.png"
+                }
+              />
+            </Col>
+          </Row>
+          {/* INPUT IMAGE */}
+          <Row>
+            <input type="file" ref={fileElement} onChange={bannerChange} />
+          </Row>
+          {/* INFO */}
+          <Row>
+            <ListGroup variant="flush">
+              <ListGroupItem>
+                <h3>EVENT</h3>
+              </ListGroupItem>
+              <ListGroupItem>
+                <Row>
+                  <Col md={2}>
+                    <FormGroup>
+                      <label>Màu</label>
+                      <input
+                        style={{ height: "70px" }}
+                        className="form-control"
+                        placeholder="Nhập màu"
+                        type="color"
+                        value={eventData?.color && eventData?.color}
+                        onChange={(e) => {
+                          setEventData({ ...eventData, color: e.target.value });
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={3}>
+                    <FormGroup>
+                      <label>Tên</label>
+                      <input
+                        type="text"
+                        placeholder="Nhập tên"
+                        className="form-control"
+                        value={eventData?.name}
+                        onChange={(e) =>
+                          setEventData({ ...eventData, name: e.target.value })
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={3}>
+                    <FormGroup>
+                      <label>Ưu đãi</label>
+                      <textarea
+                        type="text"
+                        placeholder="Nhập ưu đãi"
+                        className="form-control count d-inline"
+                        style={{ minHeight: "10em" }}
+                        value={eventData?.award}
+                        onChange={(e) =>
+                          setEventData({ ...eventData, award: e.target.value })
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <Row>
+                      <Col md={12}>
+                        {dateType === "date" ? (
+                          <FormGroup>
+                            <label>Ngày hết hạn</label>
+                            <input
+                              type="date"
+                              className="form-control"
+                              value={
+                                eventData?.expireIn &&
+                                new Date(eventData?.expireIn)
+                                  ?.toISOString()
+                                  ?.slice(0, 10)
+                              }
+                              onChange={dateChange}
+                            />
+                          </FormGroup>
+                        ) : (
+                          <FormGroup>
+                            <label>Số ngày hết hạn</label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={dateAdd}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value > 0) setDateAdd(value);
+                                else alert("Ngày nhập không hợp lệ");
+                              }}
+                            />
+                          </FormGroup>
+                        )}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md={12}>
+                        <Button onClick={() => setDateType("days")}>
+                          Nhập số ngày
+                        </Button>
+                        <Button onClick={() => setDateType("date")}>
+                          Chọn ngày
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </ListGroupItem>
+            </ListGroup>
+          </Row>
+          {/* Button submit */}
+          <Row className="justify-content-end">
+            <Col md={2}>
+              <Button
+                onClick={submitUpdateEvent}
+                className="btn rounded btn-primary"
+              >
+                {editButton === "POST" ? "Tạo mới" : "Cập nhật"}
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      )}
+    </>
   );
 };
 
