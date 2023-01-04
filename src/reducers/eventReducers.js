@@ -2,26 +2,42 @@ import {
     EVENT_CREATE_FAIL,
     EVENT_CREATE_SUCCESS,
     EVENT_CREATE_REQUEST,
+    EVENT_CREATE_RESET,
+
     EVENT_GET_FAIL,
     EVENT_GET_SUCCESS,
     EVENT_GET_REQUEST,
+    EVENT_GET_RESET,
+
     EVENTS_GET_FAIL,
     EVENTS_GET_SUCCESS,
     EVENTS_GET_REQUEST,
+    EVENTS_GET_RESET,
+
     EVENT_UPDATE_FAIL,
     EVENT_UPDATE_SUCCESS,
     EVENT_UPDATE_REQUEST,
+    EVENT_UPDATE_RESET,
+
     EVENT_DELETE_FAIL,
     EVENT_DELETE_SUCCESS,
     EVENT_DELETE_REQUEST,
+    EVENT_DELETE_RESET,
+
+
 } from "../constants/eventContants"
 
-export const eventsGetReducer = (state = {
+const initState = {
     loading: false,
     success: false,
     error: false,
-}, action) => {
+}
+export const eventsGetReducer = (state = initState, action) => {
     switch (action.type) {
+        case EVENTS_GET_RESET:
+            {
+                return initState
+            }
         case EVENTS_GET_REQUEST:
             return {
                 loading: true,
@@ -42,12 +58,12 @@ export const eventsGetReducer = (state = {
             return state
     }
 }
-export const eventCreateReducer = (state = {
-    loading: false,
-    success: false,
-    error: false,
-}, action) => {
+export const eventCreateReducer = (state = initState, action) => {
     switch (action.type) {
+        case EVENT_CREATE_RESET:
+            {
+                return initState
+            }
         case EVENT_CREATE_REQUEST:
             return {
                 loading: true,
@@ -68,12 +84,12 @@ export const eventCreateReducer = (state = {
     }
 }
 
-export const eventGetReducer = (state = {
-    loading: false,
-    success: false,
-    error: false,
-}, action) => {
+export const eventGetReducer = (state = initState, action) => {
     switch (action.type) {
+        case EVENT_GET_RESET:
+            {
+                return initState
+            }
         case EVENT_GET_REQUEST:
             return {
                 loading: true,
@@ -93,12 +109,12 @@ export const eventGetReducer = (state = {
             return state
     }
 }
-export const eventUpdateReducer = (state = {
-    loading: false,
-    success: false,
-    error: false,
-}, action) => {
+export const eventUpdateReducer = (state = initState, action) => {
     switch (action.type) {
+        case EVENT_UPDATE_RESET:
+            {
+                return initState
+            }
         case EVENT_UPDATE_REQUEST:
             return {
                 loading: true,
@@ -118,12 +134,12 @@ export const eventUpdateReducer = (state = {
             return state
     }
 }
-export const eventDeleteReducer = (state = {
-    loading: false,
-    success: false,
-    error: false,
-}, action) => {
+export const eventDeleteReducer = (state = initState, action) => {
     switch (action.type) {
+        case EVENT_DELETE_RESET:
+            {
+                return initState
+            }
         case EVENT_DELETE_REQUEST:
             return {
                 loading: true,

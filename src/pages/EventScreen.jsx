@@ -3,7 +3,12 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../components/loader/Loader";
 import Message from "../components/message/Message";
-import { createEvent, getEvent, updateEvent } from "../actions/eventAction";
+import {
+  createEvent,
+  getEvent,
+  resetEventState,
+  updateEvent,
+} from "../actions/eventAction";
 import {
   Button,
   Col,
@@ -15,7 +20,12 @@ import {
 } from "react-bootstrap";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { LinkContainer } from "react-router-bootstrap";
+import ProductButtonShow from "../components/event/ProductButtonShow";
 const EventScreen = ({ match, history }) => {
+  const dispatch = useDispatch();
+  // selected List
+  const [selectedList, setSelectedList] = useState([]);
+  // event
   const [eventData, setEventData] = useState({
     products: [],
     name: "",
@@ -23,14 +33,18 @@ const EventScreen = ({ match, history }) => {
     color: "",
     award: "",
   });
+  // POST OR PUT CHECK
   const [editButton, setEditButton] = useState("PUT");
+  // Select time type
   const [dateType, setDateType] = useState("date");
   const [dateAdd, setDateAdd] = useState(0);
-  const dispatch = useDispatch();
+  // File Element
   const fileElement = useRef(null);
+  // GET API STATE
   const { loading, success, error, event } = useSelector(
     (state) => state.eventDetail
   );
+
   const {
     loading: loadingCreate,
     success: successCreate,
@@ -66,24 +80,24 @@ const EventScreen = ({ match, history }) => {
         award: "",
       });
     }
-  }, [match.params.id]);
+  }, [match.params.id, dispatch]);
   useEffect(() => {
     if (event && match.params.id !== "create") {
       setBannerUrl(event?.banner?.url);
       setEventData({
-        products: event?.product,
+        products: event?.products,
         name: event?.name,
         expireIn: new Date(event?.expireIn),
         color: event?.color,
         award: event?.award,
       });
+      setSelectedList(event?.products);
     }
-  }, [event]);
+  }, [event, match.params.id]);
   useEffect(() => {
     const successState = successDelete || successCreate || successUpdate;
-    console.log(successCreate);
-    // if (successState) history.push("/events");
-  }, [successCreate]);
+    successState && history.push("/events");
+  }, [successCreate, successDelete, successUpdate, history, dispatch]);
   // Handler
   // BANNER IMAGE CHANGE
   const bannerChange = (e) => {
@@ -116,12 +130,12 @@ const EventScreen = ({ match, history }) => {
     formData.append("image", fileElement.current.files[0]);
     // catch add date
     let data = eventData;
-    console.log(dateAdd);
     if (editButton === "PUT") {
       // [PUT]
       data = {
         ...data,
         addAvailableDays: dateAdd,
+        products: selectedList,
       };
       formData.append("data", JSON.stringify(data));
       dispatch(updateEvent(formData));
@@ -130,6 +144,7 @@ const EventScreen = ({ match, history }) => {
       data = {
         ...data,
         availableDays: dateAdd,
+        products: selectedList,
       };
       formData.append("data", JSON.stringify(data));
       dispatch(createEvent(formData));
@@ -138,11 +153,6 @@ const EventScreen = ({ match, history }) => {
   };
   return (
     <>
-      <LinkContainer className="my-3" to="/events">
-        <Button className="btn rounded" variant="cyan">
-          Go Back
-        </Button>
-      </LinkContainer>
       {loading || loadingCreate || loadingDelete || loadingUpdate ? (
         <Loader />
       ) : error || errorCreate || errorDelete || errorUpdate ? (
@@ -183,7 +193,7 @@ const EventScreen = ({ match, history }) => {
           <Row>
             <ListGroup variant="flush">
               <ListGroupItem>
-                <h3>EVENT</h3>
+                <h3>Đang có {selectedList && selectedList.length} sản phẩm</h3>
               </ListGroupItem>
               <ListGroupItem>
                 <Row>
@@ -281,8 +291,16 @@ const EventScreen = ({ match, history }) => {
               </ListGroupItem>
             </ListGroup>
           </Row>
+          {/* ADD PRODUCT */}
+
           {/* Button submit */}
           <Row className="justify-content-end">
+            <Col md={2}>
+              <ProductButtonShow
+                setSelectedList={setSelectedList}
+                selectedList={selectedList}
+              />
+            </Col>
             <Col md={2}>
               <Button
                 onClick={submitUpdateEvent}
@@ -290,6 +308,13 @@ const EventScreen = ({ match, history }) => {
               >
                 {editButton === "POST" ? "Tạo mới" : "Cập nhật"}
               </Button>
+            </Col>
+            <Col md={2}>
+              <LinkContainer to="/events">
+                <Button className="btn rounded" variant="cyan">
+                  Hủy
+                </Button>
+              </LinkContainer>
             </Col>
           </Row>
         </Form>

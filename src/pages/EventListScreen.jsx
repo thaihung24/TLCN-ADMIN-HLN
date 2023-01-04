@@ -5,7 +5,7 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import Message from "../components/message/Message";
 import Loader from "../components/loader/Loader";
-import { getEvents } from "../actions/eventAction";
+import { getEvents, resetEventState } from "../actions/eventAction";
 const EventListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
   const { loading, success, error, events } = useSelector(
@@ -16,6 +16,7 @@ const EventListScreen = ({ history, match }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
+    dispatch(resetEventState());
     if (userInfo && userInfo.data.user.isAdmin) {
       dispatch(getEvents());
     } else {
@@ -30,6 +31,7 @@ const EventListScreen = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
+          {/* TABLE DATA INFO */}
           <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>
@@ -44,45 +46,52 @@ const EventListScreen = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {events?.map((event) => (
-                <tr key={event._id}>
-                  <td className="text">{event._id}</td>
-                  <td className="text">{event.user && event.user.name}</td>
-                  <td className="text">{event.award.substring(0, 10)}</td>
-                  <td className="text">
-                    <input type="color" disabled value={event.color} />
-                  </td>
-                  <td>
-                    <a href={event.banner.url} target="_blank">
-                      Image
-                    </a>
-                  </td>
-                  <td>{event.products.length}</td>
-                  <td>{event.expireIn.substring(0, 10)}</td>
-                  <td>
-                    {new Date(event.expireIn) - Date.now() > 0 ? (
-                      `${Math.floor(
-                        new Date(
-                          new Date(event.expireIn) - Date.now()
-                        ).getTime() /
-                          (1000 * 60 * 60 * 24)
-                      )}days`
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
+              {events &&
+                events?.length > 0 &&
+                events?.map((event) => (
+                  <tr key={event._id}>
+                    <td className="text">{event._id}</td>
+                    <td className="text">{event.user && event.user.name}</td>
+                    <td className="text">{event.award.substring(0, 10)}</td>
+                    <td className="text">
+                      <input type="color" disabled value={event.color} />
+                    </td>
+                    <td>
+                      <a href={event.banner.url} target="_blank">
+                        Image
+                      </a>
+                    </td>
+                    <td>{event.products.length}</td>
+                    <td>{event.expireIn.substring(0, 10)}</td>
+                    <td>
+                      {new Date(event.expireIn) - Date.now() > 0 ? (
+                        `${Math.floor(
+                          new Date(
+                            new Date(event.expireIn) - Date.now()
+                          ).getTime() /
+                            (1000 * 60 * 60 * 24)
+                        )}days`
+                      ) : (
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      )}
+                    </td>
 
-                  <td>
-                    <LinkContainer to={`/event/${event._id}`}>
-                      <Button variant="light" className="btn-sm">
-                        Details
-                      </Button>
-                    </LinkContainer>
-                  </td>
-                </tr>
-              ))}
+                    <td>
+                      <LinkContainer to={`/event/${event._id}`}>
+                        <Button variant="light" className="btn-sm">
+                          Details
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
+
+          {/* FINISH BUTTON */}
           <Row className="justify-content-end">
             <Col md={2}>
               <LinkContainer to="/event/create">

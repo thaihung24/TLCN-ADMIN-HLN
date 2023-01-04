@@ -2,16 +2,27 @@ import {
     EVENT_CREATE_FAIL,
     EVENT_CREATE_SUCCESS,
     EVENT_CREATE_REQUEST,
+    EVENT_CREATE_RESET,
+
     EVENT_GET_FAIL,
     EVENT_GET_SUCCESS,
     EVENT_GET_REQUEST,
+    EVENT_GET_RESET,
+
     EVENTS_GET_FAIL,
     EVENTS_GET_SUCCESS,
     EVENTS_GET_REQUEST,
+    EVENTS_GET_RESET,
+
     EVENT_UPDATE_FAIL,
     EVENT_UPDATE_SUCCESS,
     EVENT_UPDATE_REQUEST,
+    EVENT_UPDATE_RESET,
+
+    EVENT_DELETE_FAIL,
+    EVENT_DELETE_SUCCESS,
     EVENT_DELETE_REQUEST,
+    EVENT_DELETE_RESET,
 } from "../constants/eventContants"
 
 import {
@@ -107,6 +118,7 @@ export const getEvent = (id) => (dispatch, getState) => {
 }
 
 export const updateEvent = (event) => (dispatch, getState) => {
+    console.log(event)
     dispatch({
         type: EVENT_UPDATE_REQUEST,
     })
@@ -153,13 +165,24 @@ export const deleteEvent = ({
     }
     axios.delete(`${URL}/events/${eventId}`, config).then(res => {
         dispatch({
-            type: EVENT_UPDATE_SUCCESS,
+            type: EVENT_DELETE_SUCCESS,
         })
     }).catch((error) => {
         dispatch({
-            type: EVENT_UPDATE_FAIL,
+            type: EVENT_DELETE_FAIL,
             payload: error.response && error.response.data.message ?
                 error.response.data.message : error.message,
         })
+    })
+}
+export const resetEventState = () => (dispatch, getState) => {
+    dispatch({
+        type: EVENT_CREATE_RESET,
+    })
+    dispatch({
+        type: EVENT_UPDATE_RESET,
+    })
+    dispatch({
+        type: EVENT_DELETE_RESET,
     })
 }
