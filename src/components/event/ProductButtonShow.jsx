@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import ProductsModal from "./ProductsModal";
+import OptionList from "./OptionList";
 
 const ProductButtonShow = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,13 +8,14 @@ const ProductButtonShow = (props) => {
   return (
     <>
       <Button
+      style={{minWidth:"200px"}}
         className="btn rounded btn-primary"
         onClick={() => setIsOpen(true)}
       >
         Thêm sản phẩm
       </Button>
       {isOpen && (
-        <ProductsModal {...props} show={isOpen} setClose={setIsOpen} />
+        <OptionList {...props} show={isOpen} setClose={setIsOpen} />
       )}
     </>
   );

@@ -77,7 +77,7 @@ export const createEvent = (event) => (dispatch, getState) => {
     axios.post(`${URL}/events`, event, config).then(res => {
         if (res.data.success) dispatch({
             type: EVENT_CREATE_SUCCESS,
-            payload: res.data.event
+            payload: res.data
         })
     }).catch(error => {
         dispatch({
@@ -117,7 +117,7 @@ export const getEvent = (id) => (dispatch, getState) => {
     })
 }
 
-export const updateEvent = (event) => (dispatch, getState) => {
+export const updateEvent = (id, event) => (dispatch, getState) => {
     console.log(event)
     dispatch({
         type: EVENT_UPDATE_REQUEST,
@@ -133,10 +133,10 @@ export const updateEvent = (event) => (dispatch, getState) => {
             Authorization: `Bearer ${userInfo.data.access_token}`,
         },
     }
-    axios.put(`${URL}/events/${event._id}`, event, config).then(res => {
+    axios.put(`${URL}/events/${id}`, event, config).then(res => {
         dispatch({
             type: EVENT_UPDATE_SUCCESS,
-            payload: res.data.event
+            payload: res.data
         })
     }).catch((error) => {
         dispatch({
@@ -146,9 +146,9 @@ export const updateEvent = (event) => (dispatch, getState) => {
         })
     })
 }
-export const deleteEvent = ({
+export const deleteEvent = (
     eventId
-}) => (dispatch, getState) => {
+) => (dispatch, getState) => {
     dispatch({
         type: EVENT_DELETE_REQUEST
     })
@@ -166,6 +166,7 @@ export const deleteEvent = ({
     axios.delete(`${URL}/events/${eventId}`, config).then(res => {
         dispatch({
             type: EVENT_DELETE_SUCCESS,
+            payload: res.data
         })
     }).catch((error) => {
         dispatch({

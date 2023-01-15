@@ -1,10 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { Col, Dropdown, Form, Modal, Row, Button } from "react-bootstrap";
+const ColorList = ({ option, setItems }) => {
 
-const ProductItem = ({ option, setItems }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentValue, setCurrentValue] = useState(option.colors[0]?._id);
+  const [currentValue, setCurrentValue] = useState([]);
   return (
     <>
       <Dropdown.Item onClick={() => setIsOpen(true)}>
@@ -25,9 +25,9 @@ const ProductItem = ({ option, setItems }) => {
                   />
                   <p style={{ textAlign: "center" }}>{color.color}</p>
                   <Form.Check
-                    type="radio"
-                    checked={color._id === currentValue}
-                    onChange={() => setCurrentValue(color._id)}
+                    type="checkbox"
+                    
+
                     value={color._id}
                   ></Form.Check>
                 </Col>
@@ -42,10 +42,6 @@ const ProductItem = ({ option, setItems }) => {
             variant="primary"
             onClick={() => {
               setItems((prev) => {
-                const tempArr = [...prev, currentValue].filter(
-                  (v, i, arr) => arr.indexOf(v) === i
-                );
-                return tempArr;
               });
             }}
           >
@@ -57,4 +53,4 @@ const ProductItem = ({ option, setItems }) => {
   );
 };
 
-export default ProductItem;
+export default ColorList;

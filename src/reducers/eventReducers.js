@@ -72,7 +72,8 @@ export const eventCreateReducer = (state = initState, action) => {
             return {
                 loading: false,
                 success: true,
-                event: action.payload,
+                event: action.payload.event,
+                message: action.payload.message
             }
         case EVENT_CREATE_FAIL:
             return {
@@ -123,7 +124,8 @@ export const eventUpdateReducer = (state = initState, action) => {
             return {
                 loading: false,
                 success: true,
-                event: action.payload,
+                event: action.payload.event,
+                message: action.payload.message
             }
         case EVENT_UPDATE_FAIL:
             return {
@@ -148,6 +150,7 @@ export const eventDeleteReducer = (state = initState, action) => {
             return {
                 loading: false,
                 success: true,
+                message: action.payload.message
             }
         case EVENT_DELETE_FAIL:
             return {

@@ -5,6 +5,7 @@ import Loader from "../components/loader/Loader";
 import Message from "../components/message/Message";
 import {
   createEvent,
+  deleteEvent,
   getEvent,
   resetEventState,
   updateEvent,
@@ -21,6 +22,7 @@ import {
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { LinkContainer } from "react-router-bootstrap";
 import ProductButtonShow from "../components/event/ProductButtonShow";
+//
 const EventScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   // selected List
@@ -40,6 +42,9 @@ const EventScreen = ({ match, history }) => {
   const [dateAdd, setDateAdd] = useState(0);
   // File Element
   const fileElement = useRef(null);
+  // Reset Expire time
+  const [originExp, setOriginExp] = useState("");
+
   // GET API STATE
   const { loading, success, error, event } = useSelector(
     (state) => state.eventDetail
@@ -65,13 +70,17 @@ const EventScreen = ({ match, history }) => {
   } = useSelector((state) => state.eventUpdate);
   // banner url
   const [bannerUrl, setBannerUrl] = useState("");
+  // Initial event data state
   useMemo(() => {
     const eventId = match.params.id;
+    // without data dispatch to get one
     if (eventId !== "create" && eventId) {
       setEditButton("PUT");
       dispatch(getEvent(eventId));
     } else if (eventId === "create") {
+      // Create page just initial state
       setEditButton("POST");
+      setOriginExp("");
       setEventData({
         products: [],
         name: "",
@@ -81,9 +90,13 @@ const EventScreen = ({ match, history }) => {
       });
     }
   }, [match.params.id, dispatch]);
+  // After received event data
   useEffect(() => {
     if (event && match.params.id !== "create") {
       setBannerUrl(event?.banner?.url);
+
+      setOriginExp(new Date(event?.expireIn));
+
       setEventData({
         products: event?.products,
         name: event?.name,
@@ -93,11 +106,23 @@ const EventScreen = ({ match, history }) => {
       });
       setSelectedList(event?.products);
     }
-  }, [event, match.params.id]);
+  }, [match.params.id, event]);
+
+  // Update available date after expire time change
+  useEffect(() => {
+    const days = Math.round(
+      (new Date(eventData.expireIn).getTime() - Date.now()) /
+        (1000 * 60 * 60 * 24)
+    );
+    eventData.expireIn ? setDateAdd(days) : setDateAdd(0);
+  }, [eventData.expireIn]);
+
+  // navigate to event list
   useEffect(() => {
     const successState = successDelete || successCreate || successUpdate;
     successState && history.push("/events");
   }, [successCreate, successDelete, successUpdate, history, dispatch]);
+
   // Handler
   // BANNER IMAGE CHANGE
   const bannerChange = (e) => {
@@ -109,47 +134,46 @@ const EventScreen = ({ match, history }) => {
     reader.readAsDataURL(file);
   };
   // DATE CHANGE
-  const dateChange = (e) => {
+  const datePicked = (e) => {
     const value = e.target.value;
     const validDate = new Date(value).getTime() - Date.now();
-    if (validDate <= 0) {
-      alert("Ngày không hợp lệ");
-    } else {
+    const updateDate = () => {
       const days = Math.round(validDate / (1000 * 60 * 60 * 24));
       setDateAdd(days);
+      const origin = new Date(originExp || Date.now());
       setEventData({
         ...eventData,
-        expireIn: e.target.value,
+        expireIn: new Date(`${value}${origin.toISOString().slice(10)}`),
       });
-    }
+    };
+    validDate <= 0 ? alert("Ngày không hợp lệ") : updateDate();
+  };
+  // availableDateChange
+  const availableDateChange = (e) => {
+    const msecs = e.target.value * 1000 * 60 * 60 * 24;
+    setEventData({
+      ...eventData,
+      expireIn: new Date(msecs + Date.now()),
+    });
+    setDateAdd(e.target.value);
   };
   // SUBMIT CALL
-  const submitUpdateEvent = () => {
+  const submitButtonClickHandler = () => {
     const formData = new FormData();
-
-    formData.append("image", fileElement.current.files[0]);
+    fileElement.current.files[0] &&
+      formData.append("image", fileElement.current.files[0]);
     // catch add date
     let data = eventData;
-    if (editButton === "PUT") {
-      // [PUT]
-      data = {
-        ...data,
-        addAvailableDays: dateAdd,
-        products: selectedList,
-      };
-      formData.append("data", JSON.stringify(data));
-      dispatch(updateEvent(formData));
-    } else if (editButton === "POST") {
-      // [POST]
-      data = {
-        ...data,
-        availableDays: dateAdd,
-        products: selectedList,
-      };
-      formData.append("data", JSON.stringify(data));
-      dispatch(createEvent(formData));
-    }
-    //
+
+    data = {
+      ...data,
+      availableDays: dateAdd,
+      products: selectedList,
+    };
+    formData.append("data", JSON.stringify(data));
+    editButton === "PUT"
+      ? dispatch(updateEvent(match.params.id, formData))
+      : dispatch(createEvent(formData));
   };
   return (
     <>
@@ -246,31 +270,39 @@ const EventScreen = ({ match, history }) => {
                       <Col md={12}>
                         {dateType === "date" ? (
                           <FormGroup>
-                            <label>Ngày hết hạn</label>
+                            <label>
+                              {editButton === "PUT"
+                                ? "Ngày thay đổi"
+                                : "Ngày hết hạn"}
+                            </label>
                             <input
                               type="date"
                               className="form-control"
                               value={
                                 eventData?.expireIn &&
                                 new Date(eventData?.expireIn)
-                                  ?.toISOString()
-                                  ?.slice(0, 10)
+                                  .toISOString()
+                                  .slice(0, 10)
                               }
-                              onChange={dateChange}
+                              onChange={datePicked}
                             />
                           </FormGroup>
                         ) : (
                           <FormGroup>
-                            <label>Số ngày hết hạn</label>
+                            <label>
+                              {editButton === "PUT"
+                                ? "Số ngày thay đổi"
+                                : "Số ngày hết hạn"}
+                            </label>
                             <input
                               type="number"
                               className="form-control"
                               value={dateAdd}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                if (value > 0) setDateAdd(value);
-                                else alert("Ngày nhập không hợp lệ");
-                              }}
+                              onChange={(e) =>
+                                e.target.value > 0
+                                  ? availableDateChange(e)
+                                  : alert("Ngày nhập không hợp lệ")
+                              }
                             />
                           </FormGroup>
                         )}
@@ -284,6 +316,22 @@ const EventScreen = ({ match, history }) => {
                         <Button onClick={() => setDateType("date")}>
                           Chọn ngày
                         </Button>
+                        {editButton === "PUT" && (
+                          <Button
+                            disabled={
+                              new Date(eventData?.expireIn).getTime() ===
+                              new Date(originExp).getTime()
+                            }
+                            onClick={() =>
+                              setEventData((prev) => ({
+                                ...prev,
+                                expireIn: originExp,
+                              }))
+                            }
+                          >
+                            RESET
+                          </Button>
+                        )}
                       </Col>
                     </Row>
                   </Col>
@@ -294,27 +342,50 @@ const EventScreen = ({ match, history }) => {
           {/* ADD PRODUCT */}
 
           {/* Button submit */}
-          <Row className="justify-content-end">
-            <Col md={2}>
-              <ProductButtonShow
-                setSelectedList={setSelectedList}
-                selectedList={selectedList}
-              />
-            </Col>
+          <Row className="justify-content-space-between">
+            {/* Left col */}
             <Col md={2}>
               <Button
-                onClick={submitUpdateEvent}
-                className="btn rounded btn-primary"
+                variant="danger"
+                onClick={() =>
+                  window.confirm("Expired this event?") &&
+                  dispatch(deleteEvent(match.params.id))
+                }
               >
-                {editButton === "POST" ? "Tạo mới" : "Cập nhật"}
+                Soft delete
               </Button>
             </Col>
-            <Col md={2}>
-              <LinkContainer to="/events">
-                <Button className="btn rounded" variant="cyan">
-                  Hủy
+            {/* Right col */}
+            <Col
+              style={{
+                display: "flex",
+                padding: 0,
+                justifyContent: "flex-end",
+              }}
+              md={10}
+            >
+              <Col md={3}>
+                <ProductButtonShow
+                  event={event}
+                  setSelectedList={setSelectedList}
+                  selectedList={selectedList}
+                />
+              </Col>
+              <Col md={3}>
+                <Button
+                  onClick={submitButtonClickHandler}
+                  className="btn rounded btn-primary"
+                >
+                  {editButton === "POST" ? "Xác nhận" : "Cập nhật"}
                 </Button>
-              </LinkContainer>
+              </Col>
+              <Col md={2}>
+                <LinkContainer to="/events">
+                  <Button className="btn rounded" variant="cyan">
+                    Hủy
+                  </Button>
+                </LinkContainer>
+              </Col>
             </Col>
           </Row>
         </Form>
