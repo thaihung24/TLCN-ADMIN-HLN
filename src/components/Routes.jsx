@@ -6,6 +6,9 @@ import UserListScreen from '../pages/UserListScreen'
 import LoginScreen from "../pages/LoginScreen"
 import ProductListScreen from '../pages/productListScreen'
 import OrderListScreen from '../pages/OrderListScreen'
+import EventListScreen from '../pages/EventListScreen'
+import EventScreen from '../pages/EventScreen'
+
 import OrderScreen from '../pages/OrderScreen'
 import ProductTrashScreen from '../pages/ProductTrashScreen'
 import UserEditScreen from "../pages/UserEditScreen"
@@ -47,6 +50,11 @@ const Routes = () => {
             exact
           />
           <Route path='/orders' component={OrderListScreen} exact/>
+          {/* EVENT */}
+          <Route path='/events' component={EventListScreen} exact/>
+          <Route path='/event/:id' component={EventScreen} exact/>
+
+
           <Route
             path='/orders/:pageNumber'
             component={OrderListScreen}

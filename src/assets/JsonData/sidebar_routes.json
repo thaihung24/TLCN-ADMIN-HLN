@@ -1,5 +1,4 @@
-[
-    {
+[{
         "display_name": "Dashboard",
         "route": "/",
         "icon": "bx bx-category-alt"
@@ -43,5 +42,10 @@
         "display_name": "settings",
         "route": "/settings",
         "icon": "bx bx-cog"
+    },
+    {
+        "display_name": "events",
+        "route": "/events",
+        "icon": "bx bx-cake"
     }
 ]

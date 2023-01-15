@@ -1,0 +1,71 @@
+[
+
+    {
+
+        "products": ["63743fa09878bcdd84b437c3", "63743fa09878bcdd84b4385e", "637d103478f1d60dcc1f3f70", "637d103478f1d60dcc1f3f81"],
+        "name": "LastYear",
+        "availableDays": "40",
+
+        "color": "#ffe91c",
+        "award": "Bộ quà đến 1.99 Triệu (Massage Mắt Olike + Tai nghe OPPO Enco Buds) + Trả góp 0%"
+    }, {
+        "productOptions": [{
+                "colors": [{
+                        "_id": "63743fa09878bcdd84b437c5",
+                        "colorName": "Trắng",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-trang-1-2-org.jpg"
+                    },
+                    {
+                        "_id": "63743fa09878bcdd84b437c6",
+                        "colorName": "Đen",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-den-1-1-1-org.jpg"
+                    },
+                    {
+                        "_id": "63743fa09878bcdd84b437c7",
+                        "colorName": "Vàng",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-vang-1-2-org.jpg"
+                    },
+                    {
+                        "_id": "63743fa09878bcdd84b437c8",
+                        "colorName": "Xanh lá",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-xanh-la-1-1-org.jpg"
+                    },
+                    {
+                        "_id": "63743fa09878bcdd84b437c9",
+                        "colorName": "Đỏ",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-do-1-1-1-org.jpg"
+                    }
+                ],
+                "productOptionName": "64GB",
+                "price": 14990000,
+                "_id": "63743fa09878bcdd84b437c4"
+            },
+            {
+                "colors": [{
+                        "_id": "63743fa09878bcdd84b437cb",
+                        "colorName": "Đen",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/251192/iphone-14-pro-den-1-1.jpg"
+                    },
+                    {
+                        "_id": "63743fa09878bcdd84b437cc",
+                        "colorName": "Tím",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/251192/iphone-14-pro-tim-1-1.jpg"
+                    },
+                    {
+                        "_id": "63743fa09878bcdd84b437cd",
+                        "colorName": "Vàng",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/251192/iphone-14-pro-vang-1-2.jpg"
+                    },
+                    {
+                        "_id": "63743fa09878bcdd84b437ce",
+                        "colorName": "Bạc",
+                        "image": "https://cdn.tgdd.vn/Products/Images/42/251192/iphone-14-pro-bac-1-2.jpg"
+                    }
+                ],
+                "productOptionName": "128GB",
+                "price": 16990000,
+                "_id": "63743fa09878bcdd84b437ca"
+            }
+        ]
+    }
+]
