@@ -1,26 +1,28 @@
-# TLCN-2022-BE
-![nlhlogo](https://user-images.githubusercontent.com/84399418/204710455-0592e966-386c-415e-8d9a-9c9934072016.png)
-<br/>
-**19110237 - Lê Hoàng Lộc <br/>
-19110221 - Nguyễn Thái Hưng <br/>
-19110036 - Dan Bảo Nguyên <br/>**
+# React Admin Dashboard with Multiple Themes
 
-## Team 56 WebApp all version
+    Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS
 
-**Version 2.0** - Latest - NLH ecom app   - HCMUTE TLCN project 2022 <br/>
-**Link:** https://e-com-nlh-fe.vercel.app <br/>
-**Version 1.0** - Old    - TGDD clone app - Intership program Fsoft Acedemy 2022 <br/>
-**Link:** https://02-tgdd-react02.vercel.app
+# Link 
 
+    https://tlcn-admin-hln.vercel.app/
 
-## Noti (11/02/2022 - Loc - Team 56 Representation)
-Heroku's free dynos will no longer be available from 28, Novemver 2022 <br/>
-**Alter: Render WebService <br/>
-**Link: https://tlcn-2022-be.onrender.com <br/>**
-But Heroku still be available now <br/>
-**Link: https://tlcn-2022-be.herokuapp.com <br/>**
+# Description
 
-## Back-end. TLCN 2022. Iner note
+    We will Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS
 
-JWT_SECRET = abc123    (key ma hoa passs)
-PAYPAL_CLIENT_ID = AYnnIG_uYjcamwk8Vcd5pTuDyCjl-MBx43rB-lB1eDYDNitB6swG_k97jMKAFcz0o98mjoPo1zs5ZOGP
+# Resource
+
+    Google font: https://fonts.google.com/
+
+    Boxicons: https://boxicons.com/
+
+    Images: https://unsplash.com/
+
+# Preview
+
+!["Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS"](https://user-images.githubusercontent.com/67447840/124409084-d89ad200-dd71-11eb-86e1-4c9d0a5fe587.png "Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS")
+
+!["Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS"](https://user-images.githubusercontent.com/67447840/124409129-ebada200-dd71-11eb-83a9-321edcc37aff.png "Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS")
+
+!["Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS"](https://user-images.githubusercontent.com/67447840/124409160-f9fbbe00-dd71-11eb-9169-493fc70c9240.png "Build React Admin Dashboard with Multiple Themes | React Admin Panel CSS | ReactJS")
+# TLCN-Admin
