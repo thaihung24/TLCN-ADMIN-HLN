@@ -11,6 +11,9 @@ import BombMessage from "../components/message/BombMessage";
 
 const EventListScreen = ({ history }) => {
   const dispatch = useDispatch();
+  
+
+  
   // GET ACTION STATE
   // Loading list
   const { loading, success, error, events } = useSelector(
