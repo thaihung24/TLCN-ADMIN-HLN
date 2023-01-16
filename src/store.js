@@ -51,7 +51,8 @@ import {
     eventGetReducer,
     eventsGetReducer,
     eventUpdateReducer,
-    eventDeleteReducer
+    eventDeleteReducer,
+    eventClearReducer,
 } from './reducers/eventReducers'
 // 
 import {
@@ -105,7 +106,10 @@ const reducer = combineReducers({
     eventList: eventsGetReducer,
     eventDetail: eventGetReducer,
     eventUpdate: eventUpdateReducer,
+    // SOFT DELETE
     eventDelete: eventDeleteReducer,
+    // HARD DELETE
+    eventClear: eventClearReducer,
 })
 const optionItemsFromStorage = localStorage.getItem('optionItems') ?
     JSON.parse(localStorage.getItem('optionItems')) : []

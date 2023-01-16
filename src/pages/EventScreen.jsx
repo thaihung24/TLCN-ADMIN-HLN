@@ -352,7 +352,7 @@ const EventScreen = ({ match, history }) => {
                   dispatch(deleteEvent(match.params.id))
                 }
               >
-                Soft delete
+                Disable
               </Button>
             </Col>
             {/* Right col */}

@@ -5,15 +5,13 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import Message from "../components/message/Message";
 import Loader from "../components/loader/Loader";
-import { getEvents } from "../actions/eventAction";
+import { getEvents, clearEvent } from "../actions/eventAction";
 import { Link } from "react-router-dom";
 import BombMessage from "../components/message/BombMessage";
 
 const EventListScreen = ({ history }) => {
   const dispatch = useDispatch();
-  
 
-  
   // GET ACTION STATE
   // Loading list
   const { loading, success, error, events } = useSelector(
@@ -34,15 +32,26 @@ const EventListScreen = ({ history }) => {
     message: messageCreate,
   } = useSelector((state) => state.createEvent);
   // Delete event
+  // Soft delete
   const {
     loading: loadingDelete,
     success: successDelete,
     error: errorDelete,
     message: messageDelete,
   } = useSelector((state) => state.eventDelete);
+  // Hard delete
+  const {
+    loading: loadingClear,
+    success: successClear,
+    error: errorClear,
+    message: messageClear,
+  } = useSelector((state) => state.eventClear);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
+  // Event Listener
+  const clearExpiredEventsClickHandler = () => {
+    dispatch(clearEvent());
+  };
   useEffect(() => {
     // dispatch();
     if (userInfo && userInfo.data.user.isAdmin) {
@@ -54,28 +63,29 @@ const EventListScreen = ({ history }) => {
 
   return (
     <>
-      {loading ? (
+      {loading ||
+      loadingClear ||
+      loadingCreate ||
+      loadingDelete ||
+      loadingUpdate ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
         <>
           {/* Alert success action */}
-          <>
-            {successUpdate && (
-              <BombMessage variant="success">{messageUpdate}</BombMessage>
-            )}
-            {successCreate && (
-              <BombMessage variant="success">{messageCreate}</BombMessage>
-            )}
-            {successDelete && (
-              <BombMessage variant="success">{messageDelete}</BombMessage>
-            )}
-          </>
+          {(successUpdate ||
+            successCreate ||
+            successDelete ||
+            successClear) && (
+            <BombMessage variant="success">
+              {messageUpdate || messageCreate || messageDelete || successClear}
+            </BombMessage>
+          )}
+
           {/* Filter */}
           <Row>
-            <Col>
-            </Col>
+            <Col></Col>
           </Row>
           {/* TABLE DATA INFO */}
           <Table striped bordered hover responsive className="table-sm">
@@ -148,7 +158,7 @@ const EventListScreen = ({ history }) => {
                 <Button className="btn rounded btn-primary">Tạo mới</Button>
               </LinkContainer>
             </Col>
-            <Col md={4}>
+            <Col md={4} onClick={clearExpiredEventsClickHandler}>
               <Button variant="danger">Clean expired</Button>
             </Col>
           </Row>
