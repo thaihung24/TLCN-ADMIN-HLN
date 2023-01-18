@@ -208,6 +208,7 @@ export const clearEvent = () => (dispatch, getState) => {
             payload: res.data
         })
     }).catch((error) => {
+        console.log(error)
         dispatch({
             type: EVENT_CLEAR_FAIL,
             payload: error.response && error.response.data.message ?
@@ -227,5 +228,11 @@ export const resetEventState = () => (dispatch, getState) => {
     })
     dispatch({
         type: EVENT_CLEAR_RESET,
+    })
+    dispatch({
+        type: EVENT_GET_RESET,
+    })
+    dispatch({
+        type: EVENTS_GET_RESET,
     })
 }

@@ -39,9 +39,11 @@ const initState = {
 export const eventsGetReducer = (state = initState, action) => {
     switch (action.type) {
         case EVENTS_GET_RESET:
-            {
-                return initState
+            return {
+                ...state,
+                ...initState
             }
+
         case EVENTS_GET_REQUEST:
             return {
                 loading: true,
@@ -65,9 +67,11 @@ export const eventsGetReducer = (state = initState, action) => {
 export const eventCreateReducer = (state = initState, action) => {
     switch (action.type) {
         case EVENT_CREATE_RESET:
-            {
-                return initState
+            return {
+                ...state,
+                ...initState
             }
+
         case EVENT_CREATE_REQUEST:
             return {
                 loading: true,
@@ -92,9 +96,11 @@ export const eventCreateReducer = (state = initState, action) => {
 export const eventGetReducer = (state = initState, action) => {
         switch (action.type) {
             case EVENT_GET_RESET:
-                {
-                    return initState
+                return {
+                    ...state,
+                    initState
                 }
+
             case EVENT_GET_REQUEST:
                 return {
                     loading: true,
@@ -118,9 +124,11 @@ export const eventGetReducer = (state = initState, action) => {
 export const eventUpdateReducer = (state = initState, action) => {
         switch (action.type) {
             case EVENT_UPDATE_RESET:
-                {
-                    return initState
+                return {
+                    ...state,
+                    initState
                 }
+
             case EVENT_UPDATE_REQUEST:
                 return {
                     loading: true,
@@ -145,9 +153,11 @@ export const eventUpdateReducer = (state = initState, action) => {
 export const eventDeleteReducer = (state = initState, action) => {
         switch (action.type) {
             case EVENT_DELETE_RESET:
-                {
-                    return initState
+                return {
+                    ...state,
+                    initState
                 }
+
             case EVENT_DELETE_REQUEST:
                 return {
                     loading: true,
@@ -171,9 +181,11 @@ export const eventDeleteReducer = (state = initState, action) => {
 export const eventClearReducer = (state = initState, action) => {
     switch (action.type) {
         case EVENT_CLEAR_RESET:
-            {
-                return initState
+            return {
+                ...state,
+                ...initState
             }
+
         case EVENT_CLEAR_REQUEST:
             return {
                 loading: true,

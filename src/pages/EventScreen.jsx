@@ -1,8 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-
 import { useSelector, useDispatch } from "react-redux";
-import Loader from "../components/loader/Loader";
-import Message from "../components/message/Message";
 import {
   createEvent,
   deleteEvent,
@@ -22,9 +19,15 @@ import {
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { LinkContainer } from "react-router-bootstrap";
 import ProductButtonShow from "../components/event/ProductButtonShow";
+import FetchApiState from "../components/alert/FetchApiStateEvent";
 //
-const EventScreen = ({ match, history }) => {
+const EventScreen = (props) => {
+  const { match, history } = props;
   const dispatch = useDispatch();
+  //
+  useEffect(() => {
+    dispatch(resetEventState());
+  }, []);
   // selected List
   const [selectedList, setSelectedList] = useState([]);
   // event
@@ -44,30 +47,11 @@ const EventScreen = ({ match, history }) => {
   const fileElement = useRef(null);
   // Reset Expire time
   const [originExp, setOriginExp] = useState("");
-
   // GET API STATE
-  const { loading, success, error, event } = useSelector(
-    (state) => state.eventDetail
-  );
-
-  const {
-    loading: loadingCreate,
-    success: successCreate,
-    error: errorCreate,
-    event: eventCreate,
-  } = useSelector((state) => state.createEvent);
-  const {
-    loading: loadingDelete,
-    success: successDelete,
-    error: errorDelete,
-    event: eventDelete,
-  } = useSelector((state) => state.eventDelete);
-  const {
-    loading: loadingUpdate,
-    success: successUpdate,
-    error: errorUpdate,
-    event: eventUpdate,
-  } = useSelector((state) => state.eventUpdate);
+  const { event } = useSelector((state) => state.eventDetail);
+  const { success: successCreate } = useSelector((state) => state.createEvent);
+  const { success: successDelete } = useSelector((state) => state.eventDelete);
+  const { success: successUpdate } = useSelector((state) => state.eventUpdate);
   // banner url
   const [bannerUrl, setBannerUrl] = useState("");
   // Initial event data state
@@ -119,8 +103,8 @@ const EventScreen = ({ match, history }) => {
 
   // navigate to event list
   useEffect(() => {
-    const successState = successDelete || successCreate || successUpdate;
-    successState && history.push("/events");
+    (successDelete || successCreate || successUpdate) &&
+      history.push("/events");
   }, [successCreate, successDelete, successUpdate, history, dispatch]);
 
   // Handler
@@ -177,10 +161,9 @@ const EventScreen = ({ match, history }) => {
   };
   return (
     <>
-      {loading || loadingCreate || loadingDelete || loadingUpdate ? (
-        <Loader />
-      ) : error || errorCreate || errorDelete || errorUpdate ? (
-        <Message variant="danger">{error}</Message>
+      <FetchApiState {...props} />
+      {match.params.id !== "create" && !event ? (
+        <></>
       ) : (
         <Form>
           {/* BANNER */}
@@ -366,6 +349,7 @@ const EventScreen = ({ match, history }) => {
             >
               <Col md={3}>
                 <ProductButtonShow
+                  {...props}
                   event={event}
                   setSelectedList={setSelectedList}
                   selectedList={selectedList}

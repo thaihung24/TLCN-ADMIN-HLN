@@ -3,90 +3,31 @@ import { useSelector, useDispatch } from "react-redux";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
-import Message from "../components/message/Message";
-import Loader from "../components/loader/Loader";
 import { getEvents, clearEvent } from "../actions/eventAction";
 import { Link } from "react-router-dom";
-import BombMessage from "../components/message/BombMessage";
 
-const EventListScreen = ({ history }) => {
+import FetchApiState from "../components/alert/FetchApiStateEvent";
+import EventsFilter from "../components/event/EventsFilter";
+
+const EventListScreen = (props) => {
+  const { history } = props;
   const dispatch = useDispatch();
-
-  // GET ACTION STATE
-  // Loading list
-  const { loading, success, error, events } = useSelector(
-    (state) => state.eventList
-  );
-  // Update event
-  const {
-    loading: loadingUpdate,
-    success: successUpdate,
-    error: errorUpdate,
-    message: messageUpdate,
-  } = useSelector((state) => state.eventUpdate);
-  // Create event
-  const {
-    loading: loadingCreate,
-    success: successCreate,
-    error: errorCreate,
-    message: messageCreate,
-  } = useSelector((state) => state.createEvent);
-  // Delete event
-  // Soft delete
-  const {
-    loading: loadingDelete,
-    success: successDelete,
-    error: errorDelete,
-    message: messageDelete,
-  } = useSelector((state) => state.eventDelete);
-  // Hard delete
-  const {
-    loading: loadingClear,
-    success: successClear,
-    error: errorClear,
-    message: messageClear,
-  } = useSelector((state) => state.eventClear);
+  const { events } = useSelector((state) => state.eventList);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  // Event Listener
-  const clearExpiredEventsClickHandler = () => {
-    dispatch(clearEvent());
-  };
+
   useEffect(() => {
-    // dispatch();
-    if (userInfo && userInfo.data.user.isAdmin) {
-      dispatch(getEvents());
-    } else {
-      history.push("/login");
-    }
+    if (userInfo && userInfo.data.user.isAdmin) dispatch(getEvents());
+    else history.push("/login");
   }, [dispatch, history, userInfo]);
 
   return (
     <>
-      {loading ||
-      loadingClear ||
-      loadingCreate ||
-      loadingDelete ||
-      loadingUpdate ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
-      ) : (
+      <FetchApiState {...props} />
+      {events && events.length > 0 && (
         <>
-          {/* Alert success action */}
-          {(successUpdate ||
-            successCreate ||
-            successDelete ||
-            successClear) && (
-            <BombMessage variant="success">
-              {messageUpdate || messageCreate || messageDelete || successClear}
-            </BombMessage>
-          )}
-
           {/* Filter */}
-          <Row>
-            <Col></Col>
-          </Row>
+          <EventsFilter />
           {/* TABLE DATA INFO */}
           <Table striped bordered hover responsive className="table-sm">
             <thead>
@@ -150,7 +91,6 @@ const EventListScreen = ({ history }) => {
                 ))}
             </tbody>
           </Table>
-
           {/* FINISH BUTTON */}
           <Row className="justify-content-between flex-row-reverse">
             <Col md={2}>
@@ -158,7 +98,13 @@ const EventListScreen = ({ history }) => {
                 <Button className="btn rounded btn-primary">Tạo mới</Button>
               </LinkContainer>
             </Col>
-            <Col md={4} onClick={clearExpiredEventsClickHandler}>
+            <Col
+              md={4}
+              onClick={() =>
+                window.confirm("Delete all expired event permanently") &&
+                dispatch(clearEvent())
+              }
+            >
               <Button variant="danger">Clean expired</Button>
             </Col>
           </Row>

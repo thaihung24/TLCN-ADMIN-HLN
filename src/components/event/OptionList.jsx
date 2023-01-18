@@ -22,6 +22,7 @@ const OptionList = ({
   selectedList,
   setSelectedList,
   event,
+  match,
 }) => {
   // Selected products
   const dispatch = useDispatch();
@@ -156,23 +157,23 @@ const OptionList = ({
               Clear all
             </Button>
           </Col>
-          {console.log(selectedList)}
-          {console.log(event.products)}
-
-          <Col md={6}>
-            <Button
-              disabled={
-                JSON.stringify(selectedList) === JSON.stringify(event.products)
-              }
-              onClick={() =>
-                window.confirm("Clear selected products?") &&
-                setSelectedList(event.products)
-              }
-              variant="primary"
-            >
-              Reset to previous
-            </Button>
-          </Col>
+          {match.params.id !== "create" && (
+            <Col md={6}>
+              <Button
+                disabled={
+                  JSON.stringify(selectedList) ===
+                  JSON.stringify(event.products)
+                }
+                onClick={() =>
+                  window.confirm("Clear selected products?") &&
+                  setSelectedList(event.products)
+                }
+                variant="primary"
+              >
+                Reset to previous
+              </Button>
+            </Col>
+          )}
         </Row>
       </Modal.Footer>
     </Modal>
