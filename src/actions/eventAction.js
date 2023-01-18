@@ -67,7 +67,7 @@ export const createEvent = (event) => (dispatch, getState) => {
     }
     // @@READ
     // LIST
-export const getEvents = () => (dispatch, getState) => {
+export const getEvents = (type = undefined, arrange = undefined) => (dispatch, getState) => {
         dispatch({
             type: EVENTS_GET_REQUEST,
         })
@@ -83,9 +83,22 @@ export const getEvents = () => (dispatch, getState) => {
             },
         }
         axios.get(`${URL}/events/admin/get`, config).then(res => {
+
+            const events = res.data.events.sort((a, b) => {
+                const date = (time) => new Date(time).getTime()
+                if (arrange === "Increase") {
+                    if (type === "Products") return a.products.length > b.products.length ? 1 : -1;
+                    else return date(a.expireIn) > date(b.expireIn) ? 1 : -1;
+                } else {
+                    if (type === "Products") return a.products.length < b.products.length ? 1 : -1;
+                    else return date(a.expireIn) < date(b.expireIn) ? 1 : -1;
+
+                }
+            })
+
             dispatch({
                 type: EVENTS_GET_SUCCESS,
-                payload: res.data.events
+                payload: events
             })
         }).catch((error) => {
             dispatch({
