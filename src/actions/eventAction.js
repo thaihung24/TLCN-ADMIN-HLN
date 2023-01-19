@@ -98,7 +98,10 @@ export const getEvents = (type = undefined, arrange = undefined) => (dispatch, g
 
             dispatch({
                 type: EVENTS_GET_SUCCESS,
-                payload: events
+                payload: {
+                    ...res.data,
+                    events,
+                }
             })
         }).catch((error) => {
             dispatch({
@@ -127,7 +130,7 @@ export const getEvent = (id) => (dispatch, getState) => {
     axios.get(`${URL}/events/${id}`, config).then(res => {
         dispatch({
             type: EVENT_GET_SUCCESS,
-            payload: res.data.event
+            payload: res.data
         })
     }).catch((error) => {
         dispatch({
@@ -221,7 +224,6 @@ export const clearEvent = () => (dispatch, getState) => {
             payload: res.data
         })
     }).catch((error) => {
-        console.log(error)
         dispatch({
             type: EVENT_CLEAR_FAIL,
             payload: error.response && error.response.data.message ?

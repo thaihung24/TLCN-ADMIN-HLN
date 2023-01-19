@@ -3,6 +3,7 @@ import Loader from "../loader/Loader";
 import BombMessage from "../message/BombMessage";
 import { useSelector, useDispatch } from "react-redux";
 const FetchApiState = ({ history }) => {
+  const dispatch = useDispatch();
   // GET ACTION STATE
   // Loading list
   const { loading, error, message } = useSelector((state) => state.eventList);
@@ -40,36 +41,32 @@ const FetchApiState = ({ history }) => {
     error: errorClear,
     message: messageClear,
   } = useSelector((state) => state.eventClear);
-  // navigate to list page
-  return loading ||
+  const loadingState =
+    loading ||
     loadingDetail ||
     loadingCreate ||
     loadingDelete ||
     loadingUpdate ||
-    loadingClear ? (
-    <Loader />
-  ) : error ||
+    loadingClear;
+  const errorState =
+    error ||
     errorDetail ||
     errorCreate ||
     errorDelete ||
     errorUpdate ||
-    errorClear ? (
-    <BombMessage variant="danger">
-      {error ||
-        errorDetail ||
-        errorCreate ||
-        errorDelete ||
-        errorUpdate ||
-        errorClear}
-    </BombMessage>
-  ) : successCreate || successDelete || successUpdate || successClear ? (
-    <BombMessage variant="success">
-      {message ||
-        messageCreate ||
-        messageDelete ||
-        messageUpdate ||
-        messageClear}
-    </BombMessage>
+    errorClear;
+  const successState =
+    successCreate || successDelete || successUpdate || successClear;
+  const messageState =
+    messageCreate || messageDelete || messageUpdate || messageClear;
+
+  // navigate to list page
+  return loadingState ? (
+    <Loader />
+  ) : errorState ? (
+    <BombMessage variant="danger">{errorState}</BombMessage>
+  ) : successState ? (
+    <BombMessage variant="success">{messageState}</BombMessage>
   ) : (
     <></>
   );

@@ -25,9 +25,7 @@ const EventScreen = (props) => {
   const { match, history } = props;
   const dispatch = useDispatch();
   //
-  useEffect(() => {
-    dispatch(resetEventState());
-  }, []);
+
   // selected List
   const [selectedList, setSelectedList] = useState([]);
   // event
@@ -56,6 +54,7 @@ const EventScreen = (props) => {
   const [bannerUrl, setBannerUrl] = useState("");
   // Initial event data state
   useMemo(() => {
+    dispatch(resetEventState())
     const eventId = match.params.id;
     // without data dispatch to get one
     if (eventId !== "create" && eventId) {
@@ -143,6 +142,14 @@ const EventScreen = (props) => {
   };
   // SUBMIT CALL
   const submitButtonClickHandler = () => {
+    if (
+      !eventData.award ||
+      !eventData.name ||
+      !eventData.expireIn ||
+      (selectedList.length < 1 && eventData.products < 1)
+    )
+      return alert("Invalid event input, Fill and try again.");
+
     const formData = new FormData();
     fileElement.current.files[0] &&
       formData.append("image", fileElement.current.files[0]);

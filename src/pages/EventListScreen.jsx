@@ -23,11 +23,13 @@ const EventListScreen = (props) => {
 
   return (
     <>
+      {/* Alert State */}
       <FetchApiState {...props} />
+      {/* Filter */}
+
+      <EventsFilter />
       {events && events.length > 0 && (
         <>
-          {/* Filter */}
-          <EventsFilter />
           {/* TABLE DATA INFO */}
           <Table striped bordered hover responsive className="table-sm">
             <thead>

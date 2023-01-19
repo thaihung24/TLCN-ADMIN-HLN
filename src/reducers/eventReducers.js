@@ -35,6 +35,7 @@ const initState = {
     loading: false,
     success: false,
     error: false,
+    message: ""
 }
 export const eventsGetReducer = (state = initState, action) => {
     switch (action.type) {
@@ -52,7 +53,9 @@ export const eventsGetReducer = (state = initState, action) => {
             return {
                 loading: false,
                 success: true,
-                events: action.payload,
+                events: action.payload.events,
+                message: action.payload.message
+
             }
         case EVENTS_GET_FAIL:
             return {
@@ -98,7 +101,7 @@ export const eventGetReducer = (state = initState, action) => {
             case EVENT_GET_RESET:
                 return {
                     ...state,
-                    initState
+                    ...initState
                 }
 
             case EVENT_GET_REQUEST:
@@ -109,7 +112,9 @@ export const eventGetReducer = (state = initState, action) => {
                 return {
                     loading: false,
                     success: true,
-                    event: action.payload,
+                    event: action.payload.event,
+                    message: action.payload.message
+
                 }
             case EVENT_GET_FAIL:
                 return {
@@ -126,7 +131,7 @@ export const eventUpdateReducer = (state = initState, action) => {
             case EVENT_UPDATE_RESET:
                 return {
                     ...state,
-                    initState
+                    ...initState
                 }
 
             case EVENT_UPDATE_REQUEST:
@@ -155,7 +160,7 @@ export const eventDeleteReducer = (state = initState, action) => {
             case EVENT_DELETE_RESET:
                 return {
                     ...state,
-                    initState
+                    ...initState
                 }
 
             case EVENT_DELETE_REQUEST:
@@ -185,7 +190,6 @@ export const eventClearReducer = (state = initState, action) => {
                 ...state,
                 ...initState
             }
-
         case EVENT_CLEAR_REQUEST:
             return {
                 loading: true,
