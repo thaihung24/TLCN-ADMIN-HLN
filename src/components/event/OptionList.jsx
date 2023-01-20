@@ -157,23 +157,28 @@ const OptionList = ({
               Clear all
             </Button>
           </Col>
-          {match.params.id !== "create" && (
+          {
             <Col md={6}>
               <Button
                 disabled={
-                  JSON.stringify(selectedList) ===
-                  JSON.stringify(event.products)
+                  match.params.id !== "create"
+                    ? JSON.stringify(selectedList) ===
+                      JSON.stringify(event.products)
+                    : selectedList.length < 1
                 }
-                onClick={() =>
-                  window.confirm("Clear selected products?") &&
-                  setSelectedList(event.products)
-                }
+                onClick={() => {
+                  if (window.confirm("Clear selected products?")) {
+                    match.params.id !== "create" &&
+                      setSelectedList(event.products);
+                    match.params.id === "create" && setSelectedList([]);
+                  }
+                }}
                 variant="primary"
               >
                 Reset to previous
               </Button>
             </Col>
-          )}
+          }
         </Row>
       </Modal.Footer>
     </Modal>
