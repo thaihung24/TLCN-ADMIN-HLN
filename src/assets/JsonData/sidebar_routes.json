@@ -24,6 +24,11 @@
         "icon": "bx bx-bar-chart-alt"
     },
     {
+        "display_name": "events",
+        "route": "/events",
+        "icon": "bx bx-cake"
+    },
+    {
         "display_name": "categories",
         "route": "/categories",
         "icon": "bx bx-list-ol"
@@ -42,10 +47,6 @@
         "display_name": "settings",
         "route": "/settings",
         "icon": "bx bx-cog"
-    },
-    {
-        "display_name": "events",
-        "route": "/events",
-        "icon": "bx bx-cake"
     }
+
 ]
