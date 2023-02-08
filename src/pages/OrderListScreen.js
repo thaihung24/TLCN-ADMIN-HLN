@@ -71,10 +71,18 @@ const OrderListScreen = ({ history, match }) => {
             <tbody>
               {orders.map((order) => (
                 <tr key={order._id}>
-                  <td className='text'>{order._id}</td>
-                  <td className='text'>{order.user && order.user.name}</td>
-                  <td className='text'>{order.createdAt.substring(0, 10)}</td>
-                  <td className='text'>{formatVNDC(order.totalPrice)}</td>
+                  <td className='text'>
+                    <b>{order._id}</b>
+                  </td>
+                  <td className='text'>
+                    <b>{order.user && order.user.name}</b>
+                  </td>
+                  <td className='text'>
+                    <b>{order.createdAt.substring(0, 10)}</b>
+                  </td>
+                  <td className='text'>
+                    <b>{formatVNDC(order.totalPrice)}</b>
+                  </td>
                   <td>
                     {order.isPaid ? (
                       order.paidAt.substring(0, 10)
