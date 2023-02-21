@@ -1,5 +1,4 @@
-[
-    {
+[{
         "display_name": "Dashboard",
         "route": "/",
         "icon": "bx bx-category-alt"
@@ -25,6 +24,11 @@
         "icon": "bx bx-bar-chart-alt"
     },
     {
+        "display_name": "events",
+        "route": "/events",
+        "icon": "bx bx-cake"
+    },
+    {
         "display_name": "categories",
         "route": "/categories",
         "icon": "bx bx-list-ol"
@@ -44,4 +48,5 @@
         "route": "/settings",
         "icon": "bx bx-cog"
     }
+
 ]
