@@ -1,1 +1,1 @@
-export const URL = 'https://tlcn-2022-be.onrender.com/api'
+export const URL = 'https://ecom-kltn-k19-be.onrender.com/api'
