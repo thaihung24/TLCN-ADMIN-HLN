@@ -1,0 +1,5 @@
+export const CHAT_GPT_REQUEST = 'CHAT_GPT_REQUEST'
+export const CHAT_GPT_SUCCESS = 'CHAT_GPT_SUCCESS'
+export const CHAT_GPT_FAIL = 'CHAT_GPT_FAIL'
+
+export const CLEAR_ERRORS = 'CLEAR_ERRORS'

@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Chart from 'react-apexcharts'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button, Row, Col, Nav, Card } from 'react-bootstrap'
+
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/message/Message'
 import Loader from '../components/loader/Loader'
-
+import { callChatGPT } from '../actions/chatGPTActions'
+import { CLEAR_ERRORS } from '../constants/chatgptConstants'
 const chartOptions = {
   series: [
     {
@@ -51,9 +53,31 @@ const chartOptions = {
 }
 const AnalyticsScreen = ({ history, match }) => {
   const dispatch = useDispatch()
+  const chatGPT = useSelector((state) => state.chatGPT)
+  const { loading, messages, error } = chatGPT
   const themeReducer = useSelector((state) => state.ThemeReducer.mode)
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+  const [input, setInput] = useState('')
+  const [output, setOutput] = useState('')
+  useEffect(() => {
+    if (!userInfo || !userInfo.data.user.isAdmin) {
+      history.push('/login')
+    }
+    if (error) {
+      dispatch({ type: CLEAR_ERRORS })
+    }
+  }, [dispatch, history, userInfo, error])
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    dispatch(callChatGPT(input))
+    setOutput(messages)
+    setInput('')
+  }
   return (
     <>
+      {loading && <Loader />}
       <Row>
         <Col>
           <Card>
@@ -134,6 +158,17 @@ const AnalyticsScreen = ({ history, match }) => {
           </Card>
         </Col>
       </Row>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type='text'
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+          />
+          <button type='submit'>Send</button>
+        </form>
+        <h1>{output}</h1>
+      </div>
     </>
   )
 }

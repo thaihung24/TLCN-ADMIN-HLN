@@ -15,6 +15,7 @@ import UserTrashScreen from "../pages/UserTrashScreen";
 import AnalyticsScreen from "../pages/AnalyticsScreen";
 import AddProductScreens from "../pages/AddProductScreens";
 import ProductEditScreen from "../pages/ProductEditScreen";
+import ChatPage from "../pages/ChatPage";
 import { Route, Switch } from "react-router-dom";
 import PageNotFound from "../pages/error/PageNotFound";
 const Routes = () => {
@@ -53,6 +54,7 @@ const Routes = () => {
       <Route path="/orders/:pageNumber" component={OrderListScreen} exact />
 
       <Route path="/order/:id" component={OrderScreen} exact />
+      <Route path="/chats" component={ChatPage}/>
       <main className="py-3">
         <Container>
           <Route path="/login" component={LoginScreen} exact />
