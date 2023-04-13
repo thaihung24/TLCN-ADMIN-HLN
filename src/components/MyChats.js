@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { getSender } from '../config/ChatLogics'
 import ChatLoading from './ChatLoading'
 import { ChatState } from '../Context/ChatProvider'
-
+import { URL } from '../apis/axios'
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState()
 
@@ -22,7 +22,7 @@ const MyChats = ({ fetchAgain }) => {
         },
       }
 
-      const { data } = await axios.get('/api/chats', config)
+      const { data } = await axios.get(`${URL}/chats`, config)
       setChats(data)
     } catch (error) {
       toast({
