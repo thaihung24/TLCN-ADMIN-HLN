@@ -198,12 +198,7 @@ const OrderScreen = ({ match }) => {
                 <Nav className='justify-content-center '>
                   <Nav.Item>
                     {order && order.isConfirm ? (
-                      <Button
-                        disabled
-                        type='submit'
-                        variant='primary'
-                        onClick={() => confirmHandler(orderId)}
-                      >
+                      <Button disabled type='submit' variant='primary'>
                         Confirm
                       </Button>
                     ) : (

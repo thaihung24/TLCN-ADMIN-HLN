@@ -68,6 +68,7 @@ export const getOrderDetail = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
+    console.log(userInfo.data.access_token)
     const { data } = await axios.get(`${URL}/orders/${id}`, config)
     dispatch({
       type: ORDER_DETAIL_SUCCESS,
@@ -171,7 +172,7 @@ export const listOrders =
         `${URL}/orders?page=${pageNumber}`,
         config
       )
-
+      console.log(data)
       dispatch({
         type: ORDER_LIST_SUCCESS,
         payload: data,
@@ -203,11 +204,11 @@ export const confirmOrderById = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.data.access_token}`,
       },
     }
-
-    const { data } = await axios.put(`${URL}/orders/confirm/${id}`, config)
+    const { data } = await axios.put(`${URL}/orders/confirm/${id}`, {}, config)
 
     dispatch({
       type: ORDER_CONFIRM_SUCCESS,

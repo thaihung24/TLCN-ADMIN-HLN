@@ -15,7 +15,8 @@ import animationData from '../animations/typing.json'
 import io from 'socket.io-client'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import { ChatState } from '../Context/ChatProvider'
-const ENDPOINT = 'https://ecom-kltn-k19-be.onrender.com' // "https://talk-a-tive.herokuapp.com"; -> After deployment
+// const ENDPOINT = 'https://ecom-kltn-k19-be.onrender.com' // "https://talk-a-tive.herokuapp.com"; -> After deployment
+const ENDPOINT = 'http://localhost:5000'
 var socket, selectedChatCompare
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -107,7 +108,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket = io(ENDPOINT)
     socket.emit('setup', user.data.user)
     socket.on('connected', () => setSocketConnected(true))
-    socket.on('typing', () => setIsTyping(true))
+    socket.on('typing', () => {
+      setIsTyping(true)
+      console.log('typpinng')
+    })
     socket.on('stop typing', () => setIsTyping(false))
 
     // eslint-disable-next-line
