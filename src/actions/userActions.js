@@ -189,7 +189,6 @@ export const getListUsers =
         `${URL}/users?page=${pageNumber}`,
         config
       )
-      console.log(data)
       dispatch({
         type: USER_LIST_SUCCESS,
         payload: data,
