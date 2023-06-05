@@ -69,7 +69,7 @@ const UserTrashScreen = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm '>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>STT</th>
                 <th>NAME</th>
                 <th>EMAIL</th>
                 <th>ADMIN</th>
@@ -77,9 +77,9 @@ const UserTrashScreen = ({ history, match }) => {
             </thead>
             <tbody>
               {users &&
-                users.map((user) => (
+                users.map((user, index) => (
                   <tr key={user._id}>
-                    <td>{user._id}</td>
+                    <td>{index + (pageNumber && pageNumber - 1) * 10}</td>
                     <td>{user.name}</td>
                     <td>
                       <a href={`mailto:${user.email}`}>{user.email}</a>

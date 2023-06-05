@@ -207,7 +207,7 @@ export const restoreProduct = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.patch(`${URL}/products/${id}/restore`, config)
+    await axios.patch(`${URL}/products/${id}/restore`, {}, config)
 
     dispatch({
       type: PRODUCT_RESTORE_SUCCESS,

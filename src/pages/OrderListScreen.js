@@ -39,6 +39,7 @@ const OrderListScreen = ({ history, match }) => {
     Cancel: 'danger',
     Confirm: 'primary',
     confirm: 'primary',
+    Transaction_created: 'success',
   }
   const formatVNDC = (price) => {
     return Intl.NumberFormat('it-IT', {
@@ -58,7 +59,7 @@ const OrderListScreen = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>STT</th>
                 <th>USER</th>
                 <th>DATE</th>
                 <th>TOTAL</th>
@@ -69,10 +70,10 @@ const OrderListScreen = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {orders.map((order, index) => (
                 <tr key={order._id}>
                   <td className='text'>
-                    <b>{order._id}</b>
+                    <b>{index + (pageNumber && pageNumber - 1) * 10}</b>
                   </td>
                   <td className='text'>
                     <b>{order.user && order.user.name}</b>
@@ -99,7 +100,11 @@ const OrderListScreen = ({ history, match }) => {
                   </td>
                   <td>
                     <Badge
-                      type={orderStatus[order.status.statusNow]}
+                      type={
+                        orderStatus[order.status.statusNow]
+                          ? orderStatus[order.status.statusNow]
+                          : 'success'
+                      }
                       content={order.status.statusNow}
                     />
                   </td>

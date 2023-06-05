@@ -90,7 +90,7 @@ const ProductTrashScreen = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>STT</th>
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
@@ -99,9 +99,9 @@ const ProductTrashScreen = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {products.map((product, index) => (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
+                  <td>{index + (pageNumber && pageNumber - 1) * 10}</td>
                   <td>{product.name}</td>
                   <td>{formatVNDC(product.price)}</td>
                   <td>{product.category}</td>

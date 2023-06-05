@@ -281,7 +281,7 @@ export const restoreUser = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.patch(`${URL}/users/${id}/restore`, config)
+    await axios.patch(`${URL}/users/${id}/restore`, {}, config)
 
     dispatch({
       type: USER_RESTORE_SUCCESS,

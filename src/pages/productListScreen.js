@@ -100,7 +100,7 @@ const ProductListScreen = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>STT</th>
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>RATING</th>
@@ -109,9 +109,11 @@ const ProductListScreen = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {products.map((product, index) => (
                 <tr key={product._id}>
-                  <td className='text'>{product._id}</td>
+                  <td className='text'>
+                    {index + (pageNumber && pageNumber - 1) * 10}
+                  </td>
                   <td className='text'>{product.name}</td>
                   <td className='text'>{formatVNDC(product.price)}</td>
                   <td className='text'>

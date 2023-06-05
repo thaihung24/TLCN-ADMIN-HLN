@@ -40,7 +40,7 @@ const UserListScreen = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm '>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>STT</th>
                 <th>NAME</th>
                 <th>EMAIL</th>
                 <th>ADMIN</th>
@@ -48,10 +48,10 @@ const UserListScreen = ({ history, match }) => {
             </thead>
             <tbody>
               {users &&
-                users.map((user) => (
+                users.map((user, index) => (
                   <tr key={user._id}>
                     <td>
-                      <b>{user._id}</b>
+                      <b>{index + (pageNumber && pageNumber - 1) * 10}</b>
                     </td>
                     <td>
                       <b>{user.name}</b>
